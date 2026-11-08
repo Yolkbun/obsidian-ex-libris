@@ -1,6 +1,6 @@
 ﻿# 生成插件 Release 资产（只含 Obsidian 安装器需要的三件套）
 #
-#   powershell -NoProfile -File scripts/make-release.ps1 -Version 0.1.1
+#   powershell -NoProfile -File scripts/make-release.ps1 -Version 0.1.2
 #
 # 产物：
 #   release/<version>/plugin/    main.js / manifest.json / styles.css
