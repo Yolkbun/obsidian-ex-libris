@@ -24,6 +24,8 @@ export interface ExLibrisSettings {
   cacheRemoteCovers: boolean;
   /** 启动 Obsidian 后自动打开书架 */
   openShelfOnStartup: boolean;
+  /** 用户是否关掉过“侧车安装引导” */
+  sidecarGuideDismissed: boolean;
   /** 书架初始状态 */
   lastShelf: { preset: string; filter: TypeFilter };
 }
@@ -40,6 +42,7 @@ export const DEFAULT_SETTINGS: ExLibrisSettings = {
   exportFolder: "Library/exports",
   cacheRemoteCovers: true,
   openShelfOnStartup: false,
+  sidecarGuideDismissed: false,
   lastShelf: { preset: "all", filter: "all" },
 };
 
@@ -172,6 +175,25 @@ export class ExLibrisSettingTab extends PluginSettingTab {
       .addText((text) =>
         text.setValue(this.plugin.settings.sidecarPath).onChange(async (value) => {
           this.plugin.settings.sidecarPath = value.trim();
+          await this.plugin.saveSettings();
+        }),
+      );
+
+    new Setting(containerEl)
+      .setName("侧车安装引导")
+      .setDesc("社区版不会自动安装侧车；这里可以重新查看手动安装步骤。")
+      .addButton((button) =>
+        button.setButtonText("查看指南").onClick(() => {
+          this.plugin.showSidecarGuide(true);
+        }),
+      );
+
+    new Setting(containerEl)
+      .setName("不再自动提示安装侧车")
+      .setDesc("首次运行且侧车缺失时会弹一次安装引导；勾选后不再自动弹出。")
+      .addToggle((toggle) =>
+        toggle.setValue(this.plugin.settings.sidecarGuideDismissed).onChange(async (value) => {
+          this.plugin.settings.sidecarGuideDismissed = value;
           await this.plugin.saveSettings();
         }),
       );

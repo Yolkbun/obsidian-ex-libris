@@ -22,6 +22,10 @@ iBooks 风格书架，并在 Obsidian 内直接阅读番茄章节、把摘录带
 
 截图来自测试 vault（Obsidian 1.15.0，Windows，100% 缩放）。
 
+首次运行且没有侧车时，会弹一次安装引导（可勾选“不再提示”，也可以在设置里重新打开）：
+
+![侧车安装引导](docs/screenshots/ui-sidecar-guide.png)
+
 ---
 
 ## 现在能做什么
@@ -52,22 +56,29 @@ iBooks 风格书架，并在 Obsidian 内直接阅读番茄章节、把摘录带
 2. **不登录番茄。** 官方 App 的书架、收藏、阅读历史需要账号，本项目不碰；
    书只能手动加（链接 / 搜索 / 批量勾选）。
 3. **只支持 Windows 桌面。** 侧车是 exe，不做移动端。
-4. **上游改版会坏。** 所有上游调用集中在 `vendor/fqapp` + `sidecar-upstream` 的适配层，
-   接口变了只改那里；插件侧契约不变。仓库记录的快照是 fqapp
-   `c29b279`（2026-11-08），见 [`vendor/fqapp/COMMIT.txt`](vendor/fqapp/COMMIT.txt)。
+4. **上游改版会坏。** 所有上游调用集中在侧车仓库
+   [`ex-libris-sidecar`](https://github.com/Yolkbun/ex-libris-sidecar)（`sidecar-upstream` +
+   vendored `fqapp` core），接口变了只改那里；插件侧契约不变。插件仓库本身不含侧车源码。
 
 ## 安装
 
 ### 方式 A：从 GitHub Release 安装（推荐）
 
-Release 里提供四个文件：
+**插件本体**（[最新 Release](https://github.com/Yolkbun/obsidian-ex-libris/releases/latest)）只有三个文件：
 
 | 文件 | 放到 |
 |---|---|
 | `main.js` | `<vault>/.obsidian/plugins/ex-libris/` |
 | `manifest.json` | 同上 |
 | `styles.css` | 同上 |
-| `fqsidecar.exe` | 同上，放进 `bin/` 子目录 |
+
+**侧车**是单独的可选组件，在
+[`sidecar-0.1.0` Release](https://github.com/Yolkbun/ex-libris-sidecar/releases/tag/sidecar-0.1.0)
+里下载 `fqsidecar.exe`，放到：
+
+```
+<vault>/.obsidian/plugins/ex-libris/bin/fqsidecar.exe
+```
 
 最终结构：
 
@@ -76,47 +87,32 @@ Release 里提供四个文件：
   main.js
   manifest.json
   styles.css
-  bin/fqsidecar.exe
+  bin/fqsidecar.exe        # 可选
 ```
 
 然后在 Obsidian → 设置 → 第三方插件启用 **Ex Libris 藏书票**，重启 Obsidian。
 
-> 侧车是可选的：不放 `bin/fqsidecar.exe` 时，书架 / 豆瓣 / 摘录 / 进度照常可用，
-> 只有番茄阅读会提示不可用。Obsidian 社区目录的安装器只会下载前三个文件，
-> **不会**替你安装侧车；社区版用户需要按上面的方式手动放 exe。
+> 插件**不会**自动下载、自动安装或自动更新侧车。它只会在首次运行时弹一次安装引导，
+> 告诉你去哪个 Release 下载、放到哪个路径；勾选“不再提示”后不再自动弹出。
+>
+> 不装侧车也能用：书架、豆瓣、摘录、进度、打开笔记都正常，只有番茄阅读提示不可用。
+> Obsidian 社区目录的安装器只会下载前三个文件，侧车永远需要手动放。
 
 ### 方式 B：从源码构建
 
 ```powershell
 npm install
 npm run build
-powershell -NoProfile -File scripts/build-sidecar.ps1   # 生成 bin/fqsidecar.exe
 powershell -NoProfile -File scripts/install.ps1 -VaultPath "D:\YourVault" -Enable
 ```
 
-`scripts/install.ps1` 会把 `dist/` 和 `bin/` 一起复制进 vault 的插件目录。
+`scripts/install.ps1` 会把 `dist/` 复制进 vault；如果 `bin/fqsidecar.exe` 存在，也会一起复制。
 
-### 重新编译侧车（可选）
+### 构建侧车（可选，独立仓库）
 
-侧车源码在 `sidecar-upstream/`，复用 vendored 的 fqapp core（`vendor/fqapp/`）：
-
-```powershell
-powershell -NoProfile -File scripts/build-sidecar.ps1
-```
-
-需要 Rust + GNU 链接器。最省空间的组合是 MSYS2：
-
-```powershell
-winget install --id MSYS2.MSYS2 -e
-C:\msys64\usr\bin\bash.exe -lc "pacman -S --noconfirm mingw-w64-x86_64-rust mingw-w64-x86_64-gcc"
-powershell -NoProfile -File scripts/build-sidecar.ps1
-```
-
-也可以编译零依赖的离线样章版本（不连上游，用于开发/测试）：
-
-```powershell
-powershell -NoProfile -File scripts/build-sidecar.ps1 -Demo
-```
+侧车源码、fqapp 适配层和编译脚本都在
+[`Yolkbun/ex-libris-sidecar`](https://github.com/Yolkbun/ex-libris-sidecar)，
+按那边的 README 构建即可；本仓库不包含侧车源码和二进制。
 
 > Windows SmartScreen 可能拦截首次运行：本地编译、未签名的自用 exe，选“更多信息 → 仍要运行”。
 > 不做代码签名。
@@ -163,14 +159,14 @@ powershell -NoProfile -File scripts/build-sidecar.ps1 -Demo
         │ ShelfItem[]（唯一内部契约）
 领域层（entries / cover / exporter / progress / cache）
         │ HTTP 127.0.0.1 + X-FQ-Token
-fqsidecar.exe（sidecar-upstream）
+fqsidecar.exe（独立仓库 ex-libris-sidecar）
         │ 本进程内调用
 fqapi_core（vendor/fqapp，GPL-3.0）：设备注册、签名、拉取、解密
 ```
 
 三条硬边界：视图不直连侧车；领域层没有 DOM；侧车不知道 Obsidian。
 
-设计取舍见 [`docs/adr/`](docs/adr/)；上游适配细节见 [`sidecar/README.md`](sidecar/README.md)。
+设计取舍见 [`docs/adr/`](docs/adr/)；上游适配与侧车构建见 [ex-libris-sidecar](https://github.com/Yolkbun/ex-libris-sidecar)。
 
 ## 数据与隐私
 
@@ -240,9 +236,9 @@ stdin EOF 退出、闲置退出、父进程消失退出、`DEVICE_EXPIRED` 重�
 ## 许可证与来源
 
 - 本插件：**GPL-3.0-or-later**，见 [`LICENSE`](LICENSE)。
-- `vendor/fqapp`：来自 [ch6vip/fqapp](https://github.com/ch6vip/fqapp)（GPL-3.0），
-  原样 vendored，保留其 LICENSE 与署名。
-- `sidecar-upstream/`：本项目的适配层（同样 GPL-3.0）。
+- 侧车、fqapp 适配层与 vendored 源码：
+  [`Yolkbun/ex-libris-sidecar`](https://github.com/Yolkbun/ex-libris-sidecar)（GPL-3.0，
+  含 [ch6vip/fqapp](https://github.com/ch6vip/fqapp) 的完整对应源码与署名）。
 - 豆瓣数据由 [Wanxp/obsidian-douban](https://github.com/Wanxp/obsidian-douban) 生产，本项目只读。
 - 详见 [`NOTICE`](NOTICE)。
 
@@ -257,4 +253,4 @@ stdin EOF 退出、闲置退出、父进程消失退出、`DEVICE_EXPIRED` 重�
 **阅读器空白/标题只有“Ex Libris 阅读器”？** 从命令面板或书架点书打开；
 直接改 `workspace.json` 塞 reader 状态不被 Obsidian 支持。
 
-**上游改版了？** 更新 `vendor/fqapp` 后重跑 `scripts/build-sidecar.ps1`，插件不用动。
+**上游改版了？** 见 [ex-libris-sidecar](https://github.com/Yolkbun/ex-libris-sidecar)：更新 `vendor/fqapp` 后重编侧车并换 `fqsidecar.exe`，插件不用动。

@@ -20,7 +20,7 @@ Obsidian：1.15.0（`D:\App\Obsidian`）
 
 ## 真实上游联调（新增）
 
-- `sidecar-upstream` 用 vendored `fqapi_core` 请求真实番茄：
+- 侧车仓库 `ex-libris-sidecar`（`sidecar-upstream` + vendored `fqapi_core`）请求真实番茄：
   - 搜索「诡秘之主」→ 返回真实书籍（含《诡秘之主》原创解读等）；
   - 《十日终焉》详情：`book_name=十日终焉`、`serial_count=1496`；
   - 目录：1496 章，第 1 章 `7173216089122439711 / 第1章 空屋`；
@@ -33,7 +33,7 @@ Obsidian：1.15.0（`D:\App\Obsidian`）
 ## 已知偏差
 
 1. **书评代替段评**：段评需要 `item_version`，接口不带时返回空壳；改用书评并在 UI 标注“书评”。
-2. **目录/正文依赖上游**：上游改版需更新 `vendor/fqapp` 并重编侧车；插件契约不变。
+2. **目录/正文依赖上游**：上游改版需在侧车仓库更新 `vendor/fqapp` 并重编侧车；插件契约不变。
 3. **没有移动端**；侧车是 Windows exe。
 4. **Bases 视图选项**：工厂与渲染在无头环境验证，真实 Obsidian 中未逐个点击 slider/toggle。
 5. **真实 Obsidian 阅读器截图**为 150% 系统缩放下的窗口；用户要求不改系统/应用缩放，故未重拍 100%。
@@ -43,7 +43,7 @@ Obsidian：1.15.0（`D:\App\Obsidian`）
 ```powershell
 npm install
 npm run build
-powershell -NoProfile -File scripts/build-sidecar.ps1
 powershell -NoProfile -File scripts/install.ps1 -VaultPath "D:\YourVault" -Enable
+# 侧车：https://github.com/Yolkbun/ex-libris-sidecar
 npm test
 ```

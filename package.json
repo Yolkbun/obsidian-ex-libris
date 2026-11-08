@@ -1,6 +1,6 @@
 {
   "name": "ex-libris",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Ex Libris 藏书票 — 把豆瓣书影音和番茄小说收进一个 iBooks 风格书架。",
   "private": true,
   "type": "module",
@@ -9,7 +9,6 @@
     "build": "node esbuild.config.mjs && tsc -p tsconfig.json --noEmit",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "node --test --test-reporter=spec tests/*.test.mjs",
-    "sidecar": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/build-sidecar.ps1",
     "install:plugin": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/install.ps1"
   },
   "keywords": [

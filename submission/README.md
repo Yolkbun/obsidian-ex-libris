@@ -1,57 +1,61 @@
 # 发布到 GitHub / Obsidian 社区目录
 
-## 一、GitHub Release（安装包）
+## 仓库结构（两个仓库）
 
-Obsidian 安装插件时只会下载 release 里的：
+| 仓库 | 用途 | 是否提交社区 |
+|---|---|---|
+| `Yolkbun/obsidian-ex-libris` | 纯插件：`src/`、测试、README | ✅ 提交这个 |
+| `Yolkbun/ex-libris-sidecar` | GPL 侧车：fqapp 适配层、vendored 源码、exe | ❌ 不提交 |
+
+## 插件 Release（0.1.1）
+
+只上传 Obsidian 安装器认的三个文件：
 
 - `main.js`
 - `manifest.json`
 - `styles.css`
 
-侧车 `fqsidecar.exe` **不会**被 Obsidian 自动安装，必须作为额外资产附在 release 里，
-并在 README 里写清楚手动放置的位置（`.obsidian/plugins/ex-libris/bin/`）。
+**不要**把 `fqsidecar.exe` 放进插件 release。侧车的 release 在另一个仓库：
 
-打包：
+- `sidecar-0.1.0`（标记 Pre-release）
+  - `fqsidecar.exe`
+  - `ex-libris-full-0.1.1.zip`（插件三件套 + `bin/fqsidecar.exe`）
+  - `SHA256SUMS.txt`
 
-```powershell
-powershell -NoProfile -File scripts/make-release.ps1 -Version 0.1.0
-```
+## 提交社区目录
 
-产物在 `release/0.1.0/`，同时生成 `release/ex-libris-0.1.0.zip`
-（解压后是一个 `ex-libris/` 文件夹，适合手动安装）。
+1. 打开 <https://community.obsidian.md>，用 Obsidian 账号登录。
+2. 关联 GitHub 账号（验证仓库所有权）。
+3. 添加插件，仓库地址填：
 
-## 二、Obsidian 社区目录提交
+   ```
+   https://github.com/Yolkbun/obsidian-ex-libris
+   ```
 
-1. 仓库必须是 **public**，根目录有 `README.md`、`LICENSE`、`manifest.json`。
-2. `manifest.json` 的 `version` 必须是 `x.y.z`，且与 release 的 tag 完全一致。
-3. 打开 <https://community.obsidian.md>，用 **Obsidian 账号**登录。
-4. 关联 GitHub 账号（用于验证仓库所有权）。
-5. 添加插件，填写仓库地址；目录会读取默认分支 HEAD 的 `manifest.json`。
-6. 按自动审查结果修正问题，重新发 release 并递增版本。
+4. 目录会读取默认分支 `main` 的 `manifest.json`（当前 `0.1.1`）。
+5. 自动审查；有问题按提示改，然后发新的插件 release 并递增版本。
 
-## 三、必须写进 README 的披露（政策要求）
+## 必须写进 README 的披露（已写）
 
-- **网络使用**：侧车请求番茄上游；封面从豆瓣/番茄图床下载；无遥测。
-- **访问 vault 之外的文件**：侧车默认在插件目录内，但设置允许覆盖路径；
-  启动子进程需要读取该 exe。
-- **账号**：不需要番茄账号；不需要豆瓣账号（数据来自 obsidian-douban）。
-- **开源许可**：GPL-3.0，包含 fqapp 的 GPL 代码与署名。
+- 侧车是可选组件，需手动从另一个 release 下载并放到 `bin/`；插件不自动下载/安装/更新。
+- 首次运行缺少侧车时会弹一次安装引导（可勾选不再提示）。
+- 网络使用：侧车请求番茄上游；封面从图床下载；无遥测。
+- 访问 vault 外文件：仅在用户覆盖侧车路径时。
+- GPL-3.0 与 fqapp 署名（侧车仓库提供完整对应源码）。
 
-## 四、社区审核可能卡住的点
+## 审核风险
 
-1. 插件会启动一个外部可执行文件（侧车）。政策只明确禁止“自动安装/更新依赖”，
-   我们是让用户手动放 exe，但审核员仍可能要求说明或拒绝。
-2. 侧车包含对上游加密正文的解密实现。Obsidian 的政策没有逐条禁止，但涉及
-   第三方服务条款与版权，存在被下架的风险。
-3. 侧车无法通过 Obsidian 安装器分发，社区版用户必须额外下载，体验不完整。
+1. 插件会 `spawn` 一个外部 exe（侧车）。README 已说明是手动安装的可选组件，但审核员仍可能追问。
+2. 侧车包含上游正文解密实现。插件仓库本身不含该代码，但插件功能依赖它；仍可能因第三方服务条款被拒/下架。
+3. 社区安装器不安装侧车，因此“社区版”番茄功能需要用户额外操作，体验上不完整。
 
-## 五、给提交者的检查清单
+## 检查清单
 
-- [ ] `manifest.json` 的 `id` 是 `ex-libris`，不含 `obsidian`
-- [ ] `minAppVersion` = `1.10.0`（Bases API）
-- [ ] `isDesktopOnly` = `true`
-- [ ] 命令 id 不含插件前缀
-- [ ] README 有 LICENSE、网络披露、侧车手动安装说明、免责声明
-- [ ] release tag = `0.1.0`，资产含 `main.js` / `manifest.json` / `styles.css`
-- [ ] 额外资产 `fqsidecar.exe` 附在 release 里
-- [ ] `versions.json` 已提交
+- [x] `manifest.json` 的 `id=ex-libris`，不含 `obsidian`
+- [x] `minAppVersion=1.10.0`
+- [x] `isDesktopOnly=true`
+- [x] 命令 id 不含插件前缀
+- [x] README 有 LICENSE、网络披露、侧车手动安装说明、免责声明
+- [x] 插件 release `0.1.1` 只含三件套
+- [x] 侧车 release 独立仓库、Pre-release
+- [x] `versions.json` 已提交

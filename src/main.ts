@@ -42,6 +42,7 @@ import {
   insertExcerpt,
 } from "./actions/export-excerpt";
 import { linkDouban } from "./actions/link-douban";
+import { SidecarGuideModal } from "./actions/sidecar-guide";
 
 export default class ExLibrisPlugin extends Plugin {
   override settings: ExLibrisSettings = { ...DEFAULT_SETTINGS };
@@ -62,6 +63,7 @@ export default class ExLibrisPlugin extends Plugin {
   sidecarArgsPrefix: string[] = [];
   private bootstrapped = false;
   private basesRegistered = false;
+  private guideShown = false;
   private lastWarm = 0;
   private lastUnread = 0;
   private refreshTimer: ReturnType<typeof setTimeout> | null = null;
@@ -230,9 +232,15 @@ export default class ExLibrisPlugin extends Plugin {
       if (this.settings.sidecarEnabled) {
         void this.sidecar
           .start()
-          .then(() => {
+          .then((ready) => {
             this.refreshShelves();
-            return this.refreshUnreadCounts();
+            if (ready) {
+              return this.refreshUnreadCounts();
+            }
+            if (this.sidecar.describe().degradedReason === "missing-binary") {
+              this.showSidecarGuide();
+            }
+            return undefined;
           })
           .catch((err) => console.warn("[ex-libris] 侧车启动流程失败", err));
       }
@@ -371,6 +379,12 @@ export default class ExLibrisPlugin extends Plugin {
     });
 
     this.addCommand({
+      id: "sidecar-guide",
+      name: "侧车安装指南",
+      callback: () => this.showSidecarGuide(true),
+    });
+
+    this.addCommand({
       id: "localize-covers",
       name: "本地化所有远程封面",
       callback: () => void this.localizeAllCovers(),
@@ -434,6 +448,21 @@ export default class ExLibrisPlugin extends Plugin {
     });
     await this.metaStore.save();
     this.refreshShelves();
+  }
+
+  /**
+   * 首次运行、且侧车缺失时提示手动安装。
+   * 绝不自动下载或安装（Obsidian 社区政策禁止插件更新自身依赖）。
+   */
+  showSidecarGuide(force = false): void {
+    if (!force && (this.settings.sidecarGuideDismissed || this.guideShown)) return;
+    this.guideShown = true;
+    new SidecarGuideModal(this.app, this.pluginDirRelative(), (dontShowAgain) => {
+      if (dontShowAgain) {
+        this.settings.sidecarGuideDismissed = true;
+        void this.saveSettings();
+      }
+    }).open();
   }
 
   refreshShelves(): void {

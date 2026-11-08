@@ -5,9 +5,5 @@ release/
 .tmp/
 coverage/
 *.log
-sidecar/target/
-sidecar-upstream/target/
-vendor/fqapp/rust/target/
-vendor/fqapp/rust/.cargo/
 .test-vault/
 tests/.build/
