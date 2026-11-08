@@ -5,6 +5,7 @@ import { SidecarError } from "../sidecar/client";
 import type { ProgressStore } from "../progress/store";
 import type { EntryIndex } from "../library/entries";
 import { CommentsPanel } from "./comments-panel";
+import { TocModal } from "./toc-modal";
 
 export const VIEW_TYPE_READER = "ex-libris-reader";
 
@@ -190,6 +191,11 @@ export class ReaderView extends ItemView {
 
     const actions = doc.createElement("div");
     actions.className = "ex-libris-reader-actions";
+    const tocButton = doc.createElement("button");
+    tocButton.className = "ex-libris-icon-button";
+    tocButton.textContent = "目录";
+    tocButton.title = "章节目录（T）";
+    tocButton.addEventListener("click", () => this.openToc());
     const exportButton = doc.createElement("button");
     exportButton.className = "ex-libris-icon-button";
     exportButton.textContent = "导出本章";
@@ -200,7 +206,7 @@ export class ReaderView extends ItemView {
     commentsButton.textContent = "书评";
     commentsButton.title = "本书读者评论（只读）";
     commentsButton.addEventListener("click", () => void this.toggleComments());
-    actions.append(exportButton, commentsButton);
+    actions.append(tocButton, exportButton, commentsButton);
     header.append(this.bookLabelEl, sep, this.chapterLabelEl, actions);
 
     const main = doc.createElement("main");
@@ -293,6 +299,21 @@ export class ReaderView extends ItemView {
       }
     }
     this.showError(`读取失败：${String(err)}`, true);
+  }
+
+  /** 打开章节目录（阅读器按钮 / T / 命令面板）。 */
+  openToc(): void {
+    if (!this.toc.length) {
+      new Notice("目录还没加载好，稍后再试。");
+      return;
+    }
+    new TocModal(
+      this.app,
+      this.bookTitle,
+      this.toc,
+      this.current?.id ?? this.toc[this.currentIndex]?.id,
+      (chapterId) => void this.loadChapter(chapterId),
+    ).open();
   }
 
   /** 强制重新拉取目录（命令“刷新当前书目录”使用）。 */
@@ -467,6 +488,11 @@ export class ReaderView extends ItemView {
       case "j":
         event.preventDefault();
         void this.go(1);
+        break;
+      case "t":
+      case "T":
+        event.preventDefault();
+        this.openToc();
         break;
       default:
         break;

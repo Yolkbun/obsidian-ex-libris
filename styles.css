@@ -736,3 +736,73 @@
 .ex-libris-douban-button {
   white-space: nowrap;
 }
+
+/* --- 章节目录 --------------------------------------------------------- */
+
+.ex-libris-toc-modal {
+  max-width: 620px;
+}
+
+.ex-libris-toc-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 8px 0 12px;
+}
+
+.ex-libris-toc-bar input {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.ex-libris-toc-count {
+  flex: 0 0 auto;
+  color: var(--text-faint);
+  font-family: var(--font-monospace);
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.ex-libris-toc-list {
+  max-height: 58vh;
+  overflow-y: auto;
+  border-top: 1px solid var(--background-modifier-border);
+}
+
+.ex-libris-toc-row {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  width: 100%;
+  padding: 9px 10px;
+  border: 0;
+  border-bottom: 1px solid var(--background-modifier-border);
+  border-radius: 0;
+  background: transparent;
+  color: var(--text-normal);
+  text-align: left;
+  cursor: pointer;
+}
+
+.ex-libris-toc-row:hover {
+  background: var(--background-modifier-hover);
+}
+
+.ex-libris-toc-row.is-current {
+  background: var(--background-modifier-hover);
+  color: var(--text-accent);
+  font-weight: 600;
+}
+
+.ex-libris-toc-index {
+  flex: 0 0 auto;
+  color: var(--text-faint);
+  font-family: var(--font-monospace);
+  font-size: 11px;
+}
+
+.ex-libris-toc-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

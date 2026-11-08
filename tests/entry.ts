@@ -2,6 +2,7 @@ export { default as ExLibrisPlugin } from "../src/main";
 export { renderShelf } from "../src/views/shelf-render";
 export { filterShelf, presetCounts, typeCounts } from "../src/views/shelf-filter";
 export { resolveChapterParam } from "../src/views/reader-view";
+export { TocModal } from "../src/views/toc-modal";
 export { buildExcerptBlock, appendUnderExcerptHeading, excerptLink } from "../src/actions/export-excerpt";
 export { extractUrl } from "../src/actions/add-from-url";
 export { fanqieNotePath, createFanqieNote, writeReadingSummary } from "../src/library/fanqie-note";

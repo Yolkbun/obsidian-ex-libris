@@ -11,7 +11,7 @@
 [![License](https://img.shields.io/github/license/Yolkbun/obsidian-ex-libris?style=for-the-badge)](LICENSE)
 ![Obsidian](https://img.shields.io/badge/Obsidian-1.10%2B-7c3aed?style=for-the-badge)
 ![Windows](https://img.shields.io/badge/platform-Windows-0078d4?style=for-the-badge)
-![Tests](https://img.shields.io/badge/tests-43%20passing-2ea44f?style=for-the-badge)
+![Tests](https://img.shields.io/badge/tests-44%20passing-2ea44f?style=for-the-badge)
 
 [![GitHub stars](https://img.shields.io/github/stars/Yolkbun/obsidian-ex-libris?style=social)](https://github.com/Yolkbun/obsidian-ex-libris)
 [![Showcase](https://img.shields.io/badge/showcase-yolkbun.me%2Fobsidian--ex--libris-1c241f?style=flat-square)](https://yolkbun.me/obsidian-ex-libris/)
@@ -162,6 +162,7 @@ powershell -NoProfile -File scripts/install.ps1 -VaultPath "D:\YourVault" -Enabl
 
 | 操作 | 方式 |
 |---|---|
+| 章节目录 | 阅读器顶部 **目录** 按钮，或按 `T` |
 | 翻章 | `←` / `→` 或 `j` / `k` |
 | 导出本章 | `Ctrl+E` / 阅读器顶部按钮 |
 | 摘录选中文字 | `Ctrl+Shift+E`，插入到 `## 摘录` 下 |
@@ -186,6 +187,7 @@ powershell -NoProfile -File scripts/install.ps1 -VaultPath "D:\YourVault" -Enabl
 | `搜索番茄小说并加入` | 搜索 + 复选批量 + 右键单本 |
 | `搜索豆瓣并加入` | 搜索豆瓣书/影/剧/音并加入书架 |
 | `刷新当前书目录` | 立即重拉当前/选中番茄书的目录 |
+| `打开番茄目录` | 打开当前阅读器的章节列表 |
 | `重启番茄侧车` | 显示 `/health` 结果 |
 | `导出当前章节` / `导出整本番茄书` | 导出正文 |
 | `把番茄书挂靠到豆瓣条目` | 只写 `fq_related` |
@@ -259,14 +261,14 @@ powershell -NoProfile -File scripts/install.ps1 -VaultPath "D:\YourVault" -Enabl
 npm install
 npm run dev        # esbuild watch
 npm run build      # bundle + tsc --noEmit
-npm test           # 43 个无头测试
+npm test           # 44 个无头测试
 ```
 
 测试覆盖渲染纯函数、frontmatter 补写、筛选、摘录、缓存清理、原子写、路径穿越；
 插件加载/视图注册/Bases/书架渲染；侧车 token、检索、正文、书评、退出与重启；
 阅读器翻章、进度、断点续读、回跳；真实 `bin/fqsidecar.exe` 生命周期。
 
-当前：**43 passed / 0 failed**。真实 Obsidian 1.15.0 中已验证书架、阅读器、豆瓣搜索与番茄接口。
+当前：**44 passed / 0 failed**。真实 Obsidian 1.15.0 中已验证书架、阅读器、豆瓣搜索与番茄接口。
 
 每个版本都有独立 release notes：先写 `release-notes/<version>.md` 并更新
 [`CHANGELOG.md`](CHANGELOG.md)，`scripts/make-release.ps1` 缺 notes 会直接报错。

@@ -5,6 +5,12 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), version
 
 ## [Unreleased]
 
+## [0.2.1] - 2026-11-08
+
+### Added
+
+- Fanqie chapter TOC: reader **目录** button, `T` shortcut and command palette entry, with searchable list and current-chapter highlight.
+
 ## [0.2.0] - 2026-11-08
 
 ### Added
@@ -99,7 +105,8 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), version
 
 - iBooks-style shelf, Bases view, Douban frontmatter reading, Fanqie search/read/excerpt/export, sidecar.
 
-[Unreleased]: https://github.com/Yolkbun/obsidian-ex-libris/compare/0.2.0...HEAD
+[Unreleased]: https://github.com/Yolkbun/obsidian-ex-libris/compare/0.2.1...HEAD
+[0.2.1]: https://github.com/Yolkbun/obsidian-ex-libris/compare/0.2.0...0.2.1
 [0.2.0]: https://github.com/Yolkbun/obsidian-ex-libris/compare/0.1.9...0.2.0
 [0.1.9]: https://github.com/Yolkbun/obsidian-ex-libris/compare/0.1.8...0.1.9
 [0.1.8]: https://github.com/Yolkbun/obsidian-ex-libris/compare/0.1.7...0.1.8

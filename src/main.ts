@@ -383,6 +383,16 @@ export default class ExLibrisPlugin extends Plugin {
     });
 
     this.addCommand({
+      id: "open-toc",
+      name: "打开番茄目录",
+      callback: () => {
+        const reader = this.activeReader();
+        if (reader) reader.openToc();
+        else new Notice("先打开一本番茄书，再打开目录。");
+      },
+    });
+
+    this.addCommand({
       id: "search-douban",
       name: "搜索豆瓣并加入",
       callback: () => this.openDoubanSearch(),

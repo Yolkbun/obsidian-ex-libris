@@ -545,3 +545,23 @@ test("豆瓣音乐：解析 search page 的 window.__DATA__", async () => {
   assert.ok(api.doubanCoverUrl(items[0].coverUrl).includes("/view/subject/l/public/"));
   delete globalThis.__requestUrlHandler;
 });
+
+test("章节目录：列表、当前章、搜索与跳转", async () => {
+  const { app } = await api.createTestApp({ root: await makeRoot() });
+  const chapters = [
+    { id: "c1", title: "第一章 空屋", index: 0 },
+    { id: "c2", title: "第二章 来客", index: 1 },
+    { id: "c3", title: "第三章 夜行", index: 2 },
+  ];
+  let picked = "";
+  const modal = new api.TocModal(app, "十日终焉", chapters, "c2", (id) => { picked = id; });
+  modal.open();
+  assert.equal(modal.contentEl.querySelectorAll(".ex-libris-toc-row").length, 3);
+  assert.ok(modal.contentEl.querySelector(".ex-libris-toc-row.is-current").textContent.includes("第二章"));
+  const input = modal.contentEl.querySelector("input");
+  input.value = "夜";
+  input.dispatchEvent(new Event("input", { bubbles: true }));
+  assert.equal(modal.contentEl.querySelectorAll(".ex-libris-toc-row").length, 1);
+  modal.contentEl.querySelector(".ex-libris-toc-row").click();
+  assert.equal(picked, "c3");
+});
