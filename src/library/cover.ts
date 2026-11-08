@@ -7,6 +7,26 @@ interface CoverIndex {
   [url: string]: string;
 }
 
+const COVER_UA =
+  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/131.0 Safari/537.36";
+
+/** 豆瓣图床会校验 Referer；缺了会返回 418，而不是 403。 */
+export function coverHeaders(url: string): Record<string, string> | undefined {
+  try {
+    const host = new URL(url).hostname;
+    if (host === "douban.com" || host.endsWith(".douban.com") || host.endsWith(".doubanio.com")) {
+      return {
+        "User-Agent": COVER_UA,
+        Referer: "https://book.douban.com/",
+        Accept: "image/avif,image/webp,image/apng,image/*,*/*;q=0.8",
+      };
+    }
+  } catch {
+    // 非法 URL 交给 requestUrl 报错
+  }
+  return undefined;
+}
+
 /**
  * 封面解析优先级（规格 7.3）：
  *   1. frontmatter cover 是 vault 内路径且文件存在 → 资源路径
@@ -106,7 +126,7 @@ export class CoverResolver {
       if (this.existing.has(path)) return path;
     }
     try {
-      const response = await requestUrl({ url, method: "GET" });
+      const response = await requestUrl({ url, method: "GET", headers: coverHeaders(url) });
       if (response.status < 200 || response.status >= 300) return null;
       const filename = await this.filenameFor(url, response.headers?.["content-type"] ?? "");
       const path = joinPath(this.cacheDir, filename);
@@ -137,7 +157,7 @@ export class CoverResolver {
   /** 把远程封面下载进 vault（用于番茄轻笔记的 cover 字段）。 */
   async downloadTo(url: string, targetPath: string): Promise<boolean> {
     try {
-      const response = await requestUrl({ url, method: "GET" });
+      const response = await requestUrl({ url, method: "GET", headers: coverHeaders(url) });
       if (response.status < 200 || response.status >= 300) return false;
       await ensureDir(this.app.vault.adapter, parentDir(targetPath));
       await this.app.vault.adapter.writeBinary(targetPath, response.arrayBuffer);

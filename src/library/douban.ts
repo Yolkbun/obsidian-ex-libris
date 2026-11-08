@@ -99,6 +99,13 @@ export async function searchDouban(kind: DoubanKind, query: string): Promise<Dou
   return items;
 }
 
+/** 把搜索建议里的小图换成大图；失败时仍回退到原 URL。 */
+export function doubanCoverUrl(url: string): string {
+  return url
+    .replace("/view/subject/s/public/", "/view/subject/l/public/")
+    .replace("/view/photo/s_ratio_poster/public/", "/view/photo/l_ratio_poster/public/");
+}
+
 export interface DoubanNoteResult {
   file: TFile;
   created: boolean;
@@ -142,7 +149,7 @@ export async function createDoubanNote(
     const target = normalizePath(
       joinPath(settings.libraryRoot, "assets", "covers", `douban-${item.id}.jpg`),
     );
-    if (await covers.downloadTo(item.coverUrl, target)) {
+    if (await covers.downloadTo(doubanCoverUrl(item.coverUrl), target)) {
       coverPath = target;
     }
   }
@@ -157,11 +164,12 @@ export async function createDoubanNote(
       author: item.author,
       myState: want,
       cover: coverPath,
+      ...(item.coverUrl ? { imageData: doubanCoverUrl(item.coverUrl) } : {}),
       datePublished: item.year,
       created: new Date().toISOString().slice(0, 10),
       tags: [item.type, "douban"],
     },
-    ["type", "id", "ex_libris", "title", "author", "myState", "cover", "datePublished", "created", "tags"],
+    ["type", "id", "ex_libris", "title", "author", "myState", "cover", "imageData", "datePublished", "created", "tags"],
   );
   const body = `# ${item.title}\n\n> ${item.author || "佚名"}${item.year ? ` · ${item.year}` : ""}\n`;
   const file = await app.vault.create(path, frontmatter + body);

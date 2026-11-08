@@ -496,3 +496,29 @@ myState: 想读
   await on.init();
   assert.equal(on.all().length, 2);
 });
+
+test("豆瓣封面：换大图并带 Referer 下载", async () => {
+  const root = await makeRoot();
+  const { app } = await api.createTestApp({ root });
+  const resolver = new api.CoverResolver(app, "cache/covers", "cache/covers.json");
+  let seen = null;
+  globalThis.__requestUrlHandler = async (request) => {
+    seen = request;
+    return {
+      status: 200,
+      text: "",
+      json: null,
+      arrayBuffer: new Uint8Array([0xff, 0xd8, 0xff, 0xd9]).buffer,
+      headers: { "content-type": "image/jpeg" },
+    };
+  };
+  const small = "https://img3.doubanio.com/view/subject/s/public/s34766539.jpg";
+  const large = api.doubanCoverUrl(small);
+  assert.ok(large.includes("/view/subject/l/public/"));
+  assert.equal(api.coverHeaders(large).Referer, "https://book.douban.com/");
+  const ok = await resolver.downloadTo(large, "Library/assets/covers/douban-36573581.jpg");
+  assert.equal(ok, true);
+  assert.equal(seen.headers.Referer, "https://book.douban.com/");
+  assert.ok(await app.vault.adapter.exists("Library/assets/covers/douban-36573581.jpg"));
+  delete globalThis.__requestUrlHandler;
+});

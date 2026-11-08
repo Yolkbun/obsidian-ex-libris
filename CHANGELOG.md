@@ -5,6 +5,13 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), version
 
 ## [Unreleased]
 
+## [0.1.8] - 2026-11-08
+
+### Fixed
+
+- Douban covers: send `Referer`/`User-Agent` (418 without it), upgrade search thumbnails to large images, and store `imageData` as a fallback.
+
+
 ## [0.1.7] - 2026-11-08
 
 ### Added
@@ -78,7 +85,8 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), version
 
 - iBooks-style shelf, Bases view, Douban frontmatter reading, Fanqie search/read/excerpt/export, sidecar.
 
-[Unreleased]: https://github.com/Yolkbun/obsidian-ex-libris/compare/0.1.7...HEAD
+[Unreleased]: https://github.com/Yolkbun/obsidian-ex-libris/compare/0.1.8...HEAD
+[0.1.8]: https://github.com/Yolkbun/obsidian-ex-libris/compare/0.1.7...0.1.8
 [0.1.7]: https://github.com/Yolkbun/obsidian-ex-libris/compare/0.1.6...0.1.7
 [0.1.6]: https://github.com/Yolkbun/obsidian-ex-libris/compare/0.1.5...0.1.6
 [0.1.5]: https://github.com/Yolkbun/obsidian-ex-libris/compare/0.1.4...0.1.5
