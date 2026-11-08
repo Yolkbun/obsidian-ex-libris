@@ -1,0 +1,9 @@
+{
+  "id": "ex-libris",
+  "name": "Ex Libris 藏书票",
+  "version": "0.1.0",
+  "minAppVersion": "1.10.0",
+  "description": "把你的豆瓣书影音和番茄小说收进一个书架，摘录带出处地回到笔记。",
+  "author": "Yolkbun",
+  "isDesktopOnly": true
+}

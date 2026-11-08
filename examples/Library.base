@@ -1,0 +1,6 @@
+filters:
+  and:
+    - file.ext == "md"
+views:
+  - type: ex-libris-shelf
+    name: Ex Libris 书架

@@ -1,0 +1,8 @@
+vendored from https://github.com/ch6vip/fqapp
+commit: c29b27945d5a866a20415aac0cb234508514f80e
+date:   2026-11-08T04:25:35Z
+message: chore: 升版 1.0.201+206
+fetched: 2026-11-08 (via jsDelivr, rust/ + native/ + LICENSE)
+
+更新上游：用新的 fqapp 源码替换 rust/ 与 native/（保留 LICENSE），
+然后 powershell -NoProfile -File scripts/build-sidecar.ps1 重新编译。

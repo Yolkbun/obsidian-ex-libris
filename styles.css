@@ -1,0 +1,671 @@
+/* ==========================================================================
+   Ex Libris 藏书票
+   视觉基调：纸、书脊、暖灰；动效只用 transform / opacity。
+   ========================================================================== */
+
+.ex-libris-shelf {
+  --ex-cover-width: 140px;
+  --ex-radius: 4px;
+  padding: 4px 2px 24px;
+  color: var(--text-normal);
+}
+
+/* --- 书架网格 ------------------------------------------------------------ */
+
+.ex-libris-grid {
+  display: grid;
+  align-items: start;
+  justify-items: stretch;
+}
+
+.ex-libris-book {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  cursor: pointer;
+  outline: none;
+  border-radius: var(--ex-radius);
+}
+
+.ex-libris-book:focus-visible .ex-libris-cover {
+  box-shadow:
+    0 0 0 2px var(--background-primary),
+    0 0 0 4px var(--interactive-accent);
+}
+
+.ex-libris-book:hover .ex-libris-cover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 10px 22px rgba(0, 0, 0, 0.22),
+    0 2px 6px rgba(0, 0, 0, 0.14);
+}
+
+/* --- 封面 ---------------------------------------------------------------- */
+
+.ex-libris-cover {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  border-radius: var(--ex-radius);
+  overflow: hidden;
+  background: var(--background-secondary);
+  box-shadow:
+    0 2px 5px rgba(0, 0, 0, 0.14),
+    0 0 0 1px rgba(0, 0, 0, 0.06);
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease;
+  isolation: isolate;
+}
+
+.ex-libris-cover-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 3px;
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+
+.ex-libris-cover-image[src] {
+  opacity: 1;
+}
+
+/* 书脊：左侧暗边 + 内侧 1px 高光 */
+.ex-libris-spine {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 9px;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.28) 0%,
+    rgba(0, 0, 0, 0.12) 42%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  box-shadow: inset 1px 0 0 rgba(255, 255, 255, 0.16);
+}
+
+/* --- 来源徽标：豆瓣绿 / 番茄红，both 双点 ------------------------------ */
+
+.ex-libris-source {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1.5px rgba(255, 255, 255, 0.55);
+}
+
+.ex-libris-source-douban {
+  background: #2e9e5b;
+}
+
+.ex-libris-source-fanqie {
+  background: #e5484d;
+}
+
+.ex-libris-source-both {
+  width: 7px;
+  height: 7px;
+  background: #2e9e5b;
+}
+
+.ex-libris-source-both::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 9px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #e5484d;
+  box-shadow: 0 0 0 1.5px rgba(255, 255, 255, 0.55);
+}
+
+.ex-libris-badge {
+  position: absolute;
+  left: 12px;
+  bottom: 7px;
+  padding: 1px 6px;
+  font-size: 0.68em;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.92);
+  background: rgba(20, 18, 16, 0.62);
+  border-radius: 999px;
+  backdrop-filter: blur(3px);
+}
+
+/* --- 占位封面 ------------------------------------------------------------ */
+
+.ex-libris-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ex-libris-placeholder-initial {
+  font-family: "Songti SC", "Source Han Serif SC", "Noto Serif CJK SC", serif;
+  font-size: calc(var(--ex-cover-width, 140px) * 0.34);
+  font-weight: 600;
+  color: rgba(255, 252, 245, 0.86);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.28);
+  user-select: none;
+}
+
+/* --- 文字 ---------------------------------------------------------------- */
+
+.ex-libris-book-title {
+  font-size: 0.86em;
+  line-height: 1.35;
+  font-weight: 550;
+  color: var(--text-normal);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ex-libris-book-meta {
+  margin-top: -4px;
+  font-size: 0.72em;
+  line-height: 1.3;
+  color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ex-libris-progress {
+  position: relative;
+  height: 2px;
+  margin-top: -2px;
+  border-radius: 2px;
+  background: var(--background-modifier-border);
+  overflow: hidden;
+}
+
+.ex-libris-progress-fill {
+  height: 100%;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--interactive-accent), var(--interactive-accent-hover));
+  transition: width 240ms ease;
+}
+
+/* --- 空态 ---------------------------------------------------------------- */
+
+.ex-libris-empty {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-start;
+  padding: 48px 8px;
+  color: var(--text-muted);
+}
+
+.ex-libris-empty-title {
+  font-family: "Songti SC", "Source Han Serif SC", serif;
+  font-size: 1.15em;
+  color: var(--text-normal);
+}
+
+.ex-libris-empty-hint {
+  font-size: 0.82em;
+  max-width: 46ch;
+  line-height: 1.6;
+}
+
+/* --- 书架 ItemView ------------------------------------------------------ */
+
+.ex-libris-library {
+  display: flex;
+  height: 100%;
+  min-height: 0;
+}
+
+.ex-libris-presets {
+  flex: 0 0 168px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 14px 10px;
+  border-right: 1px solid var(--background-modifier-border);
+  background: var(--background-secondary-alt, var(--background-secondary));
+  overflow-y: auto;
+}
+
+.ex-libris-preset {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 0.86em;
+  color: var(--text-muted);
+  cursor: pointer;
+  user-select: none;
+}
+
+.ex-libris-preset:hover {
+  background: var(--background-modifier-hover);
+  color: var(--text-normal);
+}
+
+.ex-libris-preset.is-active {
+  background: var(--background-modifier-active-hover, var(--background-modifier-hover));
+  color: var(--text-normal);
+  font-weight: 600;
+}
+
+.ex-libris-preset-count {
+  font-variant-numeric: tabular-nums;
+  opacity: 0.6;
+}
+
+.ex-libris-preset-add {
+  margin-top: 8px;
+  font-size: 0.78em;
+  color: var(--text-faint);
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.ex-libris-preset-add:hover {
+  background: var(--background-modifier-hover);
+  color: var(--text-normal);
+}
+
+.ex-libris-library-main {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.ex-libris-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px 6px;
+  flex-wrap: wrap;
+}
+
+.ex-libris-chips {
+  display: flex;
+  gap: 6px;
+}
+
+.ex-libris-chip {
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 0.78em;
+  color: var(--text-muted);
+  border: 1px solid var(--background-modifier-border);
+  cursor: pointer;
+  background: transparent;
+}
+
+.ex-libris-chip:hover {
+  color: var(--text-normal);
+  border-color: var(--background-modifier-border-hover);
+}
+
+.ex-libris-chip.is-active {
+  color: var(--text-on-accent);
+  background: var(--interactive-accent);
+  border-color: transparent;
+}
+
+.ex-libris-toolbar-spacer {
+  flex: 1 1 auto;
+}
+
+.ex-libris-count {
+  font-size: 0.78em;
+  color: var(--text-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.ex-libris-library-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 6px 16px 32px;
+}
+
+.ex-libris-degraded {
+  margin: 0 16px 8px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.8em;
+  color: var(--text-muted);
+  background: var(--background-secondary);
+  border-left: 3px solid var(--color-orange, #d9822b);
+}
+
+/* --- 阅读器 -------------------------------------------------------------- */
+
+.ex-libris-reader {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  background: var(--background-primary);
+}
+
+.ex-libris-reader-header {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 10px 20px;
+  border-bottom: 1px solid var(--background-modifier-border);
+  font-size: 0.8em;
+  color: var(--text-muted);
+  flex: 0 0 auto;
+}
+
+.ex-libris-reader-book {
+  font-weight: 600;
+  color: var(--text-normal);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ex-libris-reader-sep {
+  opacity: 0.4;
+}
+
+.ex-libris-reader-chapter {
+  flex: 1 1 auto;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ex-libris-reader-actions {
+  display: flex;
+  gap: 6px;
+  flex: 0 0 auto;
+}
+
+.ex-libris-icon-button {
+  padding: 3px 9px;
+  border-radius: 6px;
+  font-size: 0.92em;
+  color: var(--text-muted);
+  background: transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+
+.ex-libris-icon-button:hover {
+  color: var(--text-normal);
+  background: var(--background-modifier-hover);
+}
+
+.ex-libris-reader-main {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  overflow: hidden;
+}
+
+.ex-libris-reader-scroll {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  padding: 40px 32px 80px;
+}
+
+.ex-libris-reader-page {
+  max-width: 38em;
+  margin: 0 auto;
+  font-family: "Songti SC", "Source Han Serif SC", "Noto Serif CJK SC", serif;
+  font-size: var(--ex-reader-font-size, 18px);
+  line-height: 1.95;
+  color: var(--text-normal);
+  letter-spacing: 0.01em;
+}
+
+.ex-libris-reader-page h1 {
+  font-size: 1.45em;
+  font-weight: 600;
+  margin: 0 0 1.6em;
+  letter-spacing: 0.02em;
+}
+
+.ex-libris-reader-page p {
+  margin: 0 0 1.05em;
+  text-align: justify;
+  text-justify: inter-ideograph;
+}
+
+.ex-libris-reader-page p:empty {
+  display: none;
+}
+
+.ex-libris-reader-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 20px;
+  border-top: 1px solid var(--background-modifier-border);
+  font-size: 0.78em;
+  color: var(--text-muted);
+  flex: 0 0 auto;
+}
+
+.ex-libris-reader-nav {
+  display: flex;
+  gap: 6px;
+}
+
+.ex-libris-reader-footer button {
+  padding: 3px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--background-modifier-border);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 1em;
+}
+
+.ex-libris-reader-footer button:hover:not(:disabled) {
+  color: var(--text-normal);
+  background: var(--background-modifier-hover);
+}
+
+.ex-libris-reader-footer button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.ex-libris-reader-loading,
+.ex-libris-reader-error {
+  max-width: 38em;
+  margin: 60px auto;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.9em;
+  line-height: 1.8;
+}
+
+.ex-libris-reader-error {
+  color: var(--text-error, #d9534f);
+}
+
+/* --- 章评 ---------------------------------------------------------------- */
+
+.ex-libris-comments {
+  flex: 0 0 320px;
+  min-width: 0;
+  border-left: 1px solid var(--background-modifier-border);
+  display: flex;
+  flex-direction: column;
+  background: var(--background-secondary);
+}
+
+.ex-libris-comments.is-hidden {
+  display: none;
+}
+
+.ex-libris-comments-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--background-modifier-border);
+  font-size: 0.82em;
+  color: var(--text-muted);
+}
+
+.ex-libris-comments-list {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: 10px 14px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ex-libris-comment {
+  display: flex;
+  gap: 8px;
+  font-size: 0.82em;
+  line-height: 1.6;
+}
+
+.ex-libris-comment-avatar {
+  flex: 0 0 26px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--background-modifier-border);
+}
+
+.ex-libris-comment-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ex-libris-comment-body {
+  min-width: 0;
+}
+
+.ex-libris-comment-user {
+  color: var(--text-muted);
+  font-size: 0.92em;
+  margin-bottom: 2px;
+}
+
+.ex-libris-comment-content {
+  color: var(--text-normal);
+  word-break: break-word;
+}
+
+.ex-libris-comment-meta {
+  color: var(--text-faint);
+  font-size: 0.86em;
+  margin-top: 2px;
+}
+
+.ex-libris-comments-status {
+  padding: 18px 14px;
+  color: var(--text-muted);
+  font-size: 0.82em;
+  line-height: 1.7;
+}
+
+/* --- 搜索面板 ------------------------------------------------------------ */
+
+.ex-libris-search-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 46vh;
+  overflow-y: auto;
+  margin: 10px 0;
+}
+
+.ex-libris-search-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.ex-libris-search-row:hover {
+  background: var(--background-modifier-hover);
+}
+
+.ex-libris-search-row input[type="checkbox"] {
+  flex: 0 0 auto;
+}
+
+.ex-libris-search-title {
+  font-size: 0.9em;
+}
+
+.ex-libris-search-author {
+  font-size: 0.76em;
+  color: var(--text-muted);
+}
+
+.ex-libris-search-empty {
+  padding: 18px 4px;
+  color: var(--text-muted);
+  font-size: 0.86em;
+}
+
+/* --- 设置 ---------------------------------------------------------------- */
+
+.ex-libris-settings-status {
+  padding: 6px 0;
+  font-size: 0.82em;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+
+.ex-libris-sidecar-log {
+  margin: 6px 0 0;
+  padding: 8px;
+  max-height: 160px;
+  overflow: auto;
+  font-size: 0.72em;
+  background: var(--background-primary-alt, var(--background-secondary));
+  border-radius: 4px;
+  white-space: pre-wrap;
+}
+
+/* --- 减少动效 ------------------------------------------------------------ */
+
+@media (prefers-reduced-motion: reduce) {
+  .ex-libris-cover,
+  .ex-libris-cover-image,
+  .ex-libris-progress-fill {
+    transition: none;
+  }
+
+  .ex-libris-book:hover .ex-libris-cover {
+    transform: none;
+  }
+
+  .ex-libris-reader-scroll {
+    scroll-behavior: auto;
+  }
+}

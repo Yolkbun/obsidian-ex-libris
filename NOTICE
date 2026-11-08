@@ -1,0 +1,35 @@
+Ex Libris 藏书票
+Copyright (C) 2026 Yolkbun
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+---
+
+第三方来源与署名
+================
+
+1. ch6vip/fqapp (https://github.com/ch6vip/fqapp)
+   许可：GPL-3.0
+   关系：Ex Libris 的侧车复用其 Rust core（设备注册、请求签名、正文解密、
+   HTTP 路由）。完整源码原样放在 vendor/fqapp/，保留其 LICENSE；本项目只新增
+   sidecar-upstream/ 适配层（同样 GPL-3.0）。按 GPL 要求提供完整对应源码。
+
+2. Wanxp/obsidian-douban (https://github.com/Wanxp/obsidian-douban)
+   许可：MIT
+   关系：豆瓣条目的 frontmatter 由该插件生产；Ex Libris 只读不写。
+
+3. Obsidian API 类型定义来自 obsidian (https://github.com/obsidianmd/obsidian-api)
+   许可：MIT
+
+4. 测试用的 jsdom、esbuild、TypeScript 等开发依赖见 package-lock.json。
