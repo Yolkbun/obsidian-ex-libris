@@ -10,6 +10,7 @@ An iBooks-style bookshelf for Obsidian
 ![Obsidian](https://img.shields.io/badge/Obsidian-1.10%2B-7c3aed?style=flat-square)
 ![Windows](https://img.shields.io/badge/platform-Windows-0078d4?style=flat-square)
 ![Tests](https://img.shields.io/badge/tests-41%20passing-2ea44f?style=flat-square)
+[![Showcase](https://img.shields.io/badge/showcase-yolkbun.me%2Fobsidian--ex--libris-1c241f?style=flat-square)](https://yolkbun.me/obsidian-ex-libris/)
 
 </div>
 
@@ -76,7 +77,7 @@ GPL-3.0-or-later. Not affiliated with ByteDance / Fanqie, Douban, Obsidian, or C
 Obsidian 桌面插件（Windows）。把豆瓣（内建搜索，或 `obsidian-douban` 导入）与番茄小说聚合成一个
 iBooks 风格书架，并在 Obsidian 内直接阅读番茄章节、把摘录带出处地送回笔记、点回跳回到原文位置。
 
-**下载安装**：[GitHub Releases](https://github.com/Yolkbun/obsidian-ex-libris/releases/latest)
+**下载安装**：[GitHub Releases](https://github.com/Yolkbun/obsidian-ex-libris/releases/latest) · [在线展示页](https://yolkbun.me/obsidian-ex-libris/)
 
 > 只想看怎么用？看 [**使用指南**](docs/使用指南.md)（安装、书架、阅读、摘录、设置、常见问题）。
 
