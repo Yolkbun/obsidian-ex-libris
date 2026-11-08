@@ -1,6 +1,6 @@
 {
   "name": "ex-libris",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Ex Libris 藏书票 — 把豆瓣书影音和番茄小说收进一个 iBooks 风格书架。",
   "private": true,
   "type": "module",
@@ -21,10 +21,10 @@
   "author": "Yolkbun",
   "license": "GPL-3.0-or-later",
   "devDependencies": {
-    "@types/node": "^24.0.0",
-    "esbuild": "^0.28.0",
-    "jsdom": "^27.0.0",
+    "@types/node": "^22.0.0",
+    "esbuild": "^0.25.0",
+    "jsdom": "^26.1.0",
     "obsidian": "^1.14.4",
-    "typescript": "^5.9.0"
+    "typescript": "^5.9.3"
   }
 }

@@ -64,7 +64,7 @@ export class ExLibrisSettingTab extends PluginSettingTab {
   override display(): void {
     const { containerEl } = this;
     containerEl.empty();
-    containerEl.createEl("h2", { text: "Ex Libris · 藏书票" });
+    new Setting(containerEl).setName("Ex Libris · 藏书票").setHeading();
 
     new Setting(containerEl)
       .setName("书架根目录")
@@ -139,7 +139,7 @@ export class ExLibrisSettingTab extends PluginSettingTab {
         }),
       );
 
-    containerEl.createEl("h3", { text: "书架" });
+    new Setting(containerEl).setName("书架").setHeading();
 
     new Setting(containerEl)
       .setName("启动时打开书架")
@@ -151,7 +151,7 @@ export class ExLibrisSettingTab extends PluginSettingTab {
         }),
       );
 
-    containerEl.createEl("h3", { text: "番茄侧车" });
+    new Setting(containerEl).setName("番茄侧车").setHeading();
 
     const status = containerEl.createDiv({ cls: "ex-libris-settings-status" });
     this.renderSidecarStatus(status);
@@ -208,7 +208,7 @@ export class ExLibrisSettingTab extends PluginSettingTab {
         }),
       );
 
-    containerEl.createEl("h3", { text: "缓存" });
+    new Setting(containerEl).setName("缓存").setHeading();
 
     const cacheInfo = containerEl.createDiv({ cls: "ex-libris-settings-status" });
     cacheInfo.setText("正在统计缓存体积…");

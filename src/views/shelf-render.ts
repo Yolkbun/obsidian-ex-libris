@@ -52,10 +52,12 @@ export function renderShelf(el: HTMLElement, items: ShelfItem[], options: ShelfR
 
   const grid = doc.createElement("div");
   grid.className = "ex-libris-grid";
-  grid.style.gap = `${gap}px`;
-  grid.style.gridTemplateColumns = options.columns
-    ? `repeat(${Math.max(1, options.columns)}, minmax(0, 1fr))`
-    : `repeat(auto-fill, minmax(${coverWidth}px, 1fr))`;
+  grid.setCssStyles({
+    gap: `${gap}px`,
+    gridTemplateColumns: options.columns
+      ? `repeat(${Math.max(1, options.columns)}, minmax(0, 1fr))`
+      : `repeat(auto-fill, minmax(${coverWidth}px, 1fr))`,
+  });
 
   const observer = createLazyObserver(options.lazy === false);
   if (observer) observers.set(el, observer);
@@ -83,7 +85,7 @@ function renderItem(
 
   const coverBox = doc.createElement("div");
   coverBox.className = "ex-libris-cover";
-  coverBox.style.setProperty("--ex-cover-width", `${options.coverWidth}px`);
+  coverBox.setCssProps({ "--ex-cover-width": `${options.coverWidth}px` });
 
   const url = item.cover ? options.resolveCover?.(item.cover, item) ?? null : null;
   if (url) {
@@ -144,7 +146,7 @@ function renderItem(
     bar.className = "ex-libris-progress";
     const fill = doc.createElement("div");
     fill.className = "ex-libris-progress-fill";
-    fill.style.width = `${clamp(item.progress, 0, 100)}%`;
+    fill.setCssStyles({ width: `${clamp(item.progress, 0, 100)}%` });
     bar.append(fill);
     bar.setAttribute("role", "progressbar");
     bar.setAttribute("aria-valuenow", String(Math.round(item.progress)));
@@ -177,7 +179,9 @@ function placeholderFor(doc: Document, title: string): HTMLElement {
   const placeholder = doc.createElement("div");
   placeholder.className = "ex-libris-placeholder";
   const hue = hueForTitle(title);
-  placeholder.style.background = `linear-gradient(160deg, hsl(${hue} 30% 46%), hsl(${(hue + 28) % 360} 34% 32%))`;
+  placeholder.setCssStyles({
+    background: `linear-gradient(160deg, hsl(${hue} 30% 46%), hsl(${(hue + 28) % 360} 34% 32%))`,
+  });
   const initial = doc.createElement("span");
   initial.className = "ex-libris-placeholder-initial";
   initial.textContent = initialForTitle(title);

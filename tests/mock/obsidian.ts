@@ -737,6 +737,11 @@ export class Setting {
     return this;
   }
 
+  setHeading(_text?: string): this {
+    this.settingEl.classList.add("setting-item-heading");
+    return this;
+  }
+
   setDesc(desc: string): this {
     this.descEl.textContent = desc;
     return this;
@@ -956,6 +961,17 @@ export function installDomHelpers(win: Window): void {
   };
   proto.detach = function (this: HTMLElement) {
     this.remove();
+  };
+  proto.setCssStyles = function (this: HTMLElement, styles: Record<string, string | number>) {
+    for (const [key, value] of Object.entries(styles)) {
+      if (value === undefined || value === null) continue;
+      (this.style as unknown as Record<string, string>)[key] = String(value);
+    }
+  };
+  proto.setCssProps = function (this: HTMLElement, props: Record<string, string>) {
+    for (const [key, value] of Object.entries(props)) {
+      this.style.setProperty(key, value);
+    }
   };
 }
 

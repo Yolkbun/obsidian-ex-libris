@@ -262,7 +262,7 @@ export class ReaderView extends ItemView {
       const retry = this.pageEl.ownerDocument.createElement("button");
       retry.className = "ex-libris-icon-button";
       retry.textContent = "重试";
-      retry.style.marginTop = "12px";
+      retry.setCssStyles({ marginTop: "12px" });
       retry.addEventListener("click", () => void this.openBook(this.bookId));
       box.append(retry);
     }

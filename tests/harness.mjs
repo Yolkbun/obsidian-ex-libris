@@ -55,6 +55,7 @@ await esbuild.build({
 });
 
 export const api = require(bundlePath);
+api.installDomHelpers(globalThis.window);
 
 export const TMP_ROOTS = [];
 

@@ -446,7 +446,6 @@
 .ex-libris-reader-page p {
   margin: 0 0 1.05em;
   text-align: justify;
-  text-justify: inter-ideograph;
 }
 
 .ex-libris-reader-page p:empty {

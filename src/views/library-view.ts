@@ -226,7 +226,7 @@ export class LibraryView extends ItemView {
       const retry = doc.createElement("button");
       retry.className = "ex-libris-chip";
       retry.textContent = "重启侧车";
-      retry.style.marginLeft = "10px";
+      retry.setCssStyles({ marginLeft: "10px" });
       retry.addEventListener("click", () => {
         void this.deps
           .restartSidecar()

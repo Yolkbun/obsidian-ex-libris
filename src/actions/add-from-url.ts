@@ -22,13 +22,12 @@ export class AddFromUrlModal extends Modal {
     title.textContent = "从链接加入书架";
     const hint = doc.createElement("p");
     hint.textContent = "粘贴 fanqienovel.com 的书籍链接，例如 https://fanqienovel.com/page/7143038691944959011";
-    hint.style.fontSize = "0.82em";
-    hint.style.color = "var(--text-muted)";
+    hint.setCssStyles({ fontSize: "0.82em", color: "var(--text-muted)" });
 
     this.input = doc.createElement("input");
     this.input.type = "text";
     this.input.placeholder = "https://fanqienovel.com/page/…";
-    this.input.style.width = "100%";
+    this.input.setCssStyles({ width: "100%" });
     this.input.addEventListener("input", () => {
       if (this.input) this.url = this.input.value;
     });
@@ -40,14 +39,16 @@ export class AddFromUrlModal extends Modal {
     });
 
     this.statusEl = doc.createElement("div");
-    this.statusEl.style.marginTop = "10px";
-    this.statusEl.style.fontSize = "0.82em";
-    this.statusEl.style.color = "var(--text-muted)";
+    this.statusEl.setCssStyles({
+      marginTop: "10px",
+      fontSize: "0.82em",
+      color: "var(--text-muted)",
+    });
 
     const action = doc.createElement("button");
     action.className = "mod-cta";
     action.textContent = "解析并加入";
-    action.style.marginTop = "12px";
+    action.setCssStyles({ marginTop: "12px" });
     action.addEventListener("click", () => void this.run());
 
     this.contentEl.append(title, hint, this.input, this.statusEl, action);

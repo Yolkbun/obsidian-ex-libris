@@ -17,4 +17,4 @@ export { DesktopSidecarHost } from "../src/sidecar/host";
 export { AtomicJsonStore } from "../src/util/atomic-json";
 export { buildFrontmatter, patchFrontmatter, parseFrontmatter, splitFrontmatter, truncateText, yamlScalar } from "../src/util/text";
 export { createTestApp, openLayout } from "./mock/app";
-export { TFile, Notice, allNotices } from "./mock/obsidian";
+export { TFile, Notice, allNotices, installDomHelpers } from "./mock/obsidian";

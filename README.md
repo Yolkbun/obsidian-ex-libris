@@ -1,11 +1,46 @@
-# Ex Libris 藏书票
+# Ex Libris Bookplate
 
-> Community display name: **Ex Libris Bookplate**（`manifest.json` 的 `name` 只允许 Basic Latin）。
+[English](#english) · [中文](#中文)
+
+## English
+
+**Ex Libris Bookplate** turns Douban and Fanqie notes into an iBooks-style bookshelf inside Obsidian.
+
+- iBooks-style shelf and a registered Bases view (`ex-libris-shelf`), with covers, progress, presets and type filters
+- Read Fanqie chapters inside Obsidian, with per-chapter progress and resume
+- Select text → `Ctrl+Shift+E` → insert a quote with source and an `obsidian://ex-libris?...` back-jump link
+- Export a chapter or a whole book; chapter text never enters your vault unless you export it
+
+### Install
+
+1. Download `main.js`, `manifest.json`, `styles.css` from the [latest release](https://github.com/Yolkbun/obsidian-ex-libris/releases/latest).
+2. Put them in `<vault>/.obsidian/plugins/ex-libris/`.
+3. Enable **Ex Libris Bookplate** in Settings → Community plugins, then restart Obsidian.
+
+Fanqie reading needs an optional local sidecar because Obsidian's installer only installs those three files:
+
+- Download `fqsidecar.exe` from the [sidecar release](https://github.com/Yolkbun/ex-libris-sidecar/releases/tag/sidecar-0.1.0).
+- Put it at `<vault>/.obsidian/plugins/ex-libris/bin/fqsidecar.exe`.
+- Settings → Ex Libris → **Restart and check**.
+
+The plugin never downloads, installs, or updates the sidecar automatically. If it is missing on first run, a dismissible guide explains the manual steps. The shelf, Douban entries, excerpts and reading progress work without it.
+
+### Network and file access
+
+- **Network**: the sidecar calls the Fanqie upstream from `127.0.0.1`; covers are fetched from Douban/Fanqie image hosts. No telemetry, no analytics.
+- **Filesystem / shell**: the plugin checks whether `bin/fqsidecar.exe` exists and spawns it with `child_process` on loopback. A user-configured sidecar path may point outside the vault.
+- **Vault enumeration**: the shelf is built by reading frontmatter of Markdown files through Obsidian's metadata cache; read-only.
+
+### License and disclaimer
+
+GPL-3.0-or-later. Not affiliated with ByteDance / Fanqie, Douban, Obsidian, or Clarivate / Ex Libris. For personal study and research only; you are responsible for complying with local laws and the terms of any service you use. See [NOTICE](NOTICE) and the full disclaimer below.
+
+## 中文
 
 > Ex Libris 是拉丁语“某某的藏书中”，指贴在自己书封内侧的那张小纸片——藏书票。
 > 这个插件做的事就是同一件：把散落在豆瓣和番茄里的东西，一张一张盖上“我的”印章，收进自己的书架。
 
-Obsidian 桌面插件（Windows，纯自用）。把 `obsidian-douban` 导入的书影音和番茄小说聚合成一个
+Obsidian 桌面插件（Windows）。把 `obsidian-douban` 导入的书影音和番茄小说聚合成一个
 iBooks 风格书架，并在 Obsidian 内直接阅读番茄章节、把摘录带出处地送回笔记、点回跳回到原文位置。
 
 **下载安装**：[GitHub Releases](https://github.com/Yolkbun/obsidian-ex-libris/releases/latest)

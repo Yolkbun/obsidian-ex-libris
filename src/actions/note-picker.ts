@@ -71,20 +71,18 @@ export class PresetModal extends Modal {
 
     const nameLabel = doc.createElement("label");
     nameLabel.textContent = "名称";
-    nameLabel.style.display = "block";
-    nameLabel.style.marginTop = "10px";
+    nameLabel.setCssStyles({ display: "block", marginTop: "10px" });
     this.nameInput = doc.createElement("input");
     this.nameInput.type = "text";
     this.nameInput.placeholder = "例如：今年想读的科幻";
-    this.nameInput.style.width = "100%";
+    this.nameInput.setCssStyles({ width: "100%" });
     nameLabel.append(this.nameInput);
 
     const fieldLabel = doc.createElement("label");
     fieldLabel.textContent = "字段";
-    fieldLabel.style.display = "block";
-    fieldLabel.style.marginTop = "10px";
+    fieldLabel.setCssStyles({ display: "block", marginTop: "10px" });
     this.fieldSelect = doc.createElement("select");
-    this.fieldSelect.style.width = "100%";
+    this.fieldSelect.setCssStyles({ width: "100%" });
     for (const [value, label] of [
       ["status", "状态"],
       ["type", "类型"],
@@ -100,18 +98,17 @@ export class PresetModal extends Modal {
 
     const valueLabel = doc.createElement("label");
     valueLabel.textContent = "值";
-    valueLabel.style.display = "block";
-    valueLabel.style.marginTop = "10px";
+    valueLabel.setCssStyles({ display: "block", marginTop: "10px" });
     this.valueInput = doc.createElement("input");
     this.valueInput.type = "text";
     this.valueInput.placeholder = "例如：在读 / book / douban / 科幻";
-    this.valueInput.style.width = "100%";
+    this.valueInput.setCssStyles({ width: "100%" });
     valueLabel.append(this.valueInput);
 
     const action = doc.createElement("button");
     action.className = "mod-cta";
     action.textContent = "保存";
-    action.style.marginTop = "14px";
+    action.setCssStyles({ marginTop: "14px" });
     action.addEventListener("click", () => this.commit());
 
     this.contentEl.append(title, nameLabel, fieldLabel, valueLabel, action);

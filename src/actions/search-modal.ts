@@ -34,12 +34,11 @@ export class FanqieSearchModal extends Modal {
     this.contentEl.append(title);
 
     const bar = doc.createElement("div");
-    bar.style.display = "flex";
-    bar.style.gap = "8px";
+    bar.setCssStyles({ display: "flex", gap: "8px" });
     this.input = doc.createElement("input");
     this.input.type = "text";
     this.input.placeholder = "书名或作者";
-    this.input.style.flex = "1 1 auto";
+    this.input.setCssStyles({ flex: "1 1 auto" });
     this.input.addEventListener("keydown", (event) => {
       if (event.key === "Enter") {
         event.preventDefault();
@@ -66,7 +65,7 @@ export class FanqieSearchModal extends Modal {
     this.footerEl.className = "mod-cta";
     this.footerEl.textContent = "加入选中的 0 本";
     this.footerEl.disabled = true;
-    this.footerEl.style.marginTop = "10px";
+    this.footerEl.setCssStyles({ marginTop: "10px" });
     this.footerEl.addEventListener("click", () => void this.join());
     this.contentEl.append(this.footerEl);
 
