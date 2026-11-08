@@ -160,6 +160,7 @@ export class EntryIndex {
   constructor(
     private readonly app: App,
     private readonly covers: CoverLookup,
+    private readonly options: { includeDouban?: () => boolean } = {},
   ) {}
 
   get isReady(): boolean {
@@ -188,7 +189,17 @@ export class EntryIndex {
     for (const [key, value] of Object.entries(fields)) {
       if (key !== "position") plain[key] = value;
     }
-    return toShelfItem(file, plain, this.covers);
+    const item = toShelfItem(file, plain, this.covers);
+    if (
+      item &&
+      item.source === "douban" &&
+      plain.ex_libris !== "douban-search" &&
+      this.options.includeDouban &&
+      !this.options.includeDouban()
+    ) {
+      return null;
+    }
+    return item;
   }
 
   /** 单个文件变化时增量更新，避免整库重扫。 */

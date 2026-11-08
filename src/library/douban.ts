@@ -152,6 +152,7 @@ export async function createDoubanNote(
     {
       type: item.type,
       id: item.id,
+      ex_libris: "douban-search",
       title: item.title,
       author: item.author,
       myState: want,
@@ -160,7 +161,7 @@ export async function createDoubanNote(
       created: new Date().toISOString().slice(0, 10),
       tags: [item.type, "douban"],
     },
-    ["type", "id", "title", "author", "myState", "cover", "datePublished", "created", "tags"],
+    ["type", "id", "ex_libris", "title", "author", "myState", "cover", "datePublished", "created", "tags"],
   );
   const body = `# ${item.title}\n\n> ${item.author || "佚名"}${item.year ? ` · ${item.year}` : ""}\n`;
   const file = await app.vault.create(path, frontmatter + body);

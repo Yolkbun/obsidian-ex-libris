@@ -178,7 +178,9 @@ export default class ExLibrisPlugin extends Plugin {
       joinPath(cacheDir, "covers"),
       joinPath(cacheDir, "covers", "index.json"),
     );
-    this.entries = new EntryIndex(this.app, this.covers);
+    this.entries = new EntryIndex(this.app, this.covers, {
+      includeDouban: () => this.settings.linkDoubanPlugin,
+    });
     this.progress = new ProgressStore(
       this.app.vault.adapter,
       joinPath(dataDir, "progress.json"),
@@ -921,7 +923,7 @@ export default class ExLibrisPlugin extends Plugin {
     new Notice(`缓存已清理：${summary.files} 个文件。`);
   }
 
-  private async rebuildShelf(): Promise<void> {
+  async rebuildShelf(): Promise<void> {
     await this.entries.rebuild();
     this.refreshShelves();
     new Notice(`书架已重建：${this.entries.all().length} 条。`);

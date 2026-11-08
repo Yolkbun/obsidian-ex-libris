@@ -22,6 +22,8 @@ export interface ExLibrisSettings {
   exportFolder: string;
   /** 豆瓣封面本地化开关（离线可读） */
   cacheRemoteCovers: boolean;
+  /** 是否联动 obsidian-douban：读取它导入的豆瓣笔记 */
+  linkDoubanPlugin: boolean;
   /** 启动 Obsidian 后自动打开书架 */
   openShelfOnStartup: boolean;
   /** 用户是否关掉过“侧车安装引导” */
@@ -41,6 +43,7 @@ export const DEFAULT_SETTINGS: ExLibrisSettings = {
   tocRefreshMinutes: 30,
   exportFolder: "Library/exports",
   cacheRemoteCovers: true,
+  linkDoubanPlugin: true,
   openShelfOnStartup: false,
   sidecarGuideDismissed: false,
   lastShelf: { preset: "all", filter: "all" },
@@ -205,6 +208,17 @@ export class ExLibrisSettingTab extends PluginSettingTab {
         button.setButtonText("重启并检查").onClick(async () => {
           await this.plugin.restartSidecar();
           this.display();
+        }),
+      );
+
+    new Setting(containerEl)
+      .setName("联动 obsidian-douban")
+      .setDesc("读取 obsidian-douban 导入的豆瓣笔记。关闭后只显示番茄条目和内建豆瓣搜索添加的条目。")
+      .addToggle((toggle) =>
+        toggle.setValue(this.plugin.settings.linkDoubanPlugin).onChange(async (value) => {
+          this.plugin.settings.linkDoubanPlugin = value;
+          await this.plugin.saveSettings();
+          await this.plugin.rebuildShelf();
         }),
       );
 

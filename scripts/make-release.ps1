@@ -18,6 +18,11 @@ $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
 $dist = Join-Path $root 'dist'
 $out = Join-Path $root "release/$Version"
+$notes = Join-Path $root "release-notes/$Version.md"
+
+if (-not (Test-Path $notes)) {
+    throw "缺少 release-notes/$Version.md：每个版本必须先写更新说明"
+}
 
 if (-not (Test-Path (Join-Path $dist 'main.js'))) {
     throw 'dist/main.js 不存在，先运行 npm run build'
@@ -49,3 +54,4 @@ Remove-Item (Join-Path $root 'release/.stage') -Recurse -Force
 Write-Host "plugin: $pluginDir"
 Get-ChildItem $pluginDir | Select-Object Name, Length | Format-Table -AutoSize
 Write-Host "zip: $zip"
+Write-Host "notes: $notes"

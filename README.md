@@ -1,12 +1,44 @@
-# Ex Libris Bookplate
+<div align="center">
 
-[English](#english) · [中文](#中文)
+<img src="docs/assets/banner.svg" alt="Ex Libris Bookplate" width="100%" />
+
+**把豆瓣与番茄收进一面 iBooks 风格书架**
+An iBooks-style bookshelf for Obsidian
+
+[![Release](https://img.shields.io/github/v/release/Yolkbun/obsidian-ex-libris?style=flat-square&label=release)](https://github.com/Yolkbun/obsidian-ex-libris/releases/latest)
+[![License](https://img.shields.io/github/license/Yolkbun/obsidian-ex-libris?style=flat-square)](LICENSE)
+![Obsidian](https://img.shields.io/badge/Obsidian-1.10%2B-7c3aed?style=flat-square)
+![Windows](https://img.shields.io/badge/platform-Windows-0078d4?style=flat-square)
+![Tests](https://img.shields.io/badge/tests-41%20passing-2ea44f?style=flat-square)
+
+</div>
+
+<details open>
+<summary><b>目录 / Contents</b></summary>
+
+- [English](#english) · [中文](#中文)
+- [界面 / Screenshots](#界面)
+- [现在能做什么](#现在能做什么)
+- [安装](#安装)
+- [使用](#使用)
+- [豆瓣联动（可选）](#豆瓣联动可选)
+- [架构](#架构)
+- [数据与隐私](#数据与隐私)
+- [开发与测试](#开发与测试)
+- [常见问题](#常见问题)
+- [许可证与来源](#许可证与来源)
+- [更新日志 / Changelog](CHANGELOG.md)
+
+</details>
+
+---
 
 ## English
 
 **Ex Libris Bookplate** turns Douban and Fanqie notes into an iBooks-style bookshelf inside Obsidian.
 
 - Search Douban (books, movies, TV) and add entries directly, without `obsidian-douban`
+- Optional linkage: read entries imported by `obsidian-douban` (toggle in settings, read-only)
 - iBooks-style shelf and a registered Bases view (`ex-libris-shelf`), with covers, progress, presets and type filters
 - Read Fanqie chapters inside Obsidian, with per-chapter progress and resume
 - Select text → `Ctrl+Shift+E` → insert a quote with source and an `obsidian://ex-libris?...` back-jump link
@@ -50,13 +82,20 @@ iBooks 风格书架，并在 Obsidian 内直接阅读番茄章节、把摘录带
 
 ## 界面
 
-| 书架 | 番茄搜索 |
-|---|---|
-| ![书架](docs/screenshots/ui-shelf.png) | ![番茄搜索](docs/screenshots/ui-search.png) |
-| **从链接加入** | **阅读器（真实番茄正文）** |
-| ![从链接加入](docs/screenshots/ui-add-url.png) | ![阅读器](docs/screenshots/ui-reader.png) |
-| **摘录带出处与回跳** | **设置与侧车状态** |
-| ![摘录](docs/screenshots/ui-excerpt.png) | ![设置](docs/screenshots/ui-settings.png) |
+<table>
+  <tr>
+    <td width="50%"><img src="docs/screenshots/ui-shelf.png" alt="书架" /><br /><sub><b>iBooks 风格书架</b></sub></td>
+    <td width="50%"><img src="docs/screenshots/ui-search.png" alt="番茄搜索" /><br /><sub><b>番茄搜索 / 批量加入</b></sub></td>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/ui-add-url.png" alt="从链接加入" /><br /><sub><b>从链接加入</b></sub></td>
+    <td><img src="docs/screenshots/ui-reader.png" alt="阅读器" /><br /><sub><b>阅读器（真实番茄正文）</b></sub></td>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/ui-excerpt.png" alt="摘录" /><br /><sub><b>摘录带出处与回跳</b></sub></td>
+    <td><img src="docs/screenshots/ui-settings.png" alt="设置" /><br /><sub><b>设置与侧车状态</b></sub></td>
+  </tr>
+</table>
 
 截图来自测试 vault（Obsidian 1.15.0，Windows，100% 缩放）。截图中的标签仍显示旧中文名；`0.1.2` 起社区显示名改为 **Ex Libris Bookplate**（Obsidian 要求 Basic Latin）。
 
@@ -202,6 +241,24 @@ powershell -NoProfile -File scripts/install.ps1 -VaultPath "D:\YourVault" -Enabl
 `.base` 里视图类型选 **Ex Libris 书架**；选项有 `coverWidth`（100–220）与 `showProgress`。
 示例见 [`examples/Library.base`](examples/Library.base)。
 
+## 豆瓣联动（可选）
+
+两种豆瓣方式可以二选一，也可以共存：
+
+| | 内建豆瓣搜索 | 联动 `obsidian-douban` |
+|---|---|---|
+| 登录豆瓣 | 不需要 | 需要 |
+| 数据来源 | 公开搜索（书/影/剧） | 你标记过的书影音 |
+| 状态/评分 | 默认 `想读` / `想看` | 保留你原来的 `myState` / `myRating` |
+| 网络 | 搜索时访问豆瓣 | 导入时由 douban 插件访问 |
+| 写入 | 新建轻笔记 | **只读**，不改豆瓣笔记 |
+
+开启方式：设置 → Ex Libris → **联动 obsidian-douban**（默认开启）。关闭后只显示番茄条目和
+内建豆瓣搜索添加的条目（带 `ex_libris: douban-search`）。
+
+完整步骤、字段映射、重复条目处理见
+[使用指南 §3.3c](docs/使用指南.md#333c-联动-obsidian-douban可选)。
+
 ## 架构
 
 ```
@@ -282,6 +339,11 @@ stdin EOF 退出、闲置退出、父进程消失退出、`DEVICE_EXPIRED` 重�
 - 本项目不绕过付费墙，也不鼓励批量下载或二次分发内容。
 - “Ex Libris”一词取自拉丁语“某某的藏书中”，与 Clarivate 旗下 Ex Libris 产品无关。
 - 如权利人认为本项目侵犯其权益，请通过 GitHub Issues 联系，我们会及时处理。
+
+## 更新日志
+
+每个版本都有独立 release notes，汇总见 [**CHANGELOG.md**](CHANGELOG.md)；
+发布记录在 [GitHub Releases](https://github.com/Yolkbun/obsidian-ex-libris/releases)。
 
 ## 许可证与来源
 

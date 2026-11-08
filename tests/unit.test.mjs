@@ -464,3 +464,35 @@ test("豆瓣搜索：解析书籍 JSON、影剧类型识别、非 JSON 报错", 
   await assert.rejects(() => api.searchDouban("book", "x"), /非 JSON/);
   delete globalThis.__requestUrlHandler;
 });
+
+test("联动开关：关闭时隐藏外部豆瓣条目，保留内建条目", async () => {
+  const root = await makeRoot();
+  const external = `---
+type: book
+id: "ext-1"
+title: 外部豆瓣
+myState: 想读
+---
+`;
+  const internal = `---
+type: book
+id: "int-1"
+ex_libris: douban-search
+title: 内建豆瓣
+myState: 想读
+---
+`;
+  const { app } = await api.createTestApp({
+    root,
+    files: { "Books/external.md": external, "Library/douban/internal.md": internal },
+  });
+  const covers = { resolve: () => null };
+  const off = new api.EntryIndex(app, covers, { includeDouban: () => false });
+  await off.init();
+  assert.equal(off.all().length, 1);
+  assert.equal(off.all()[0].title, "内建豆瓣");
+
+  const on = new api.EntryIndex(app, covers, { includeDouban: () => true });
+  await on.init();
+  assert.equal(on.all().length, 2);
+});

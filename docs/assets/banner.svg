@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="320" viewBox="0 0 1200 320" role="img" aria-label="Ex Libris Bookplate">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#17161b"/>
+      <stop offset="0.55" stop-color="#211f27"/>
+      <stop offset="1" stop-color="#121116"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#8f6b3a"/>
+      <stop offset="0.45" stop-color="#e8c98a"/>
+      <stop offset="1" stop-color="#a27b45"/>
+    </linearGradient>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="14" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect width="1200" height="320" fill="url(#bg)"/>
+  <g opacity="0.22" stroke="#e8c98a" fill="none">
+    <rect x="52" y="40" width="1096" height="240" rx="6"/>
+    <rect x="62" y="50" width="1076" height="220" rx="4"/>
+  </g>
+  <g opacity="0.35" stroke="#e8c98a" fill="none" stroke-width="1">
+    <path d="M120 260 C 240 210, 320 300, 440 250 S 640 200, 760 250 S 980 300, 1080 240"/>
+    <path d="M120 250 C 240 200, 320 290, 440 240 S 640 190, 760 240 S 980 290, 1080 230" opacity="0.5"/>
+  </g>
+  <g transform="translate(96 118)" opacity="0.9">
+    <rect x="0" y="0" width="56" height="84" rx="3" fill="none" stroke="url(#gold)" stroke-width="2"/>
+    <path d="M0 10 H56 M0 74 H56" stroke="url(#gold)" stroke-width="1"/>
+    <path d="M12 22 H44 M12 34 H44 M12 46 H38" stroke="#e8c98a" stroke-width="1.2" opacity="0.7"/>
+    <circle cx="28" cy="62" r="7" fill="none" stroke="#e8c98a" stroke-width="1.2" opacity="0.7"/>
+  </g>
+  <text x="188" y="146" font-family="Georgia, 'Times New Roman', serif" font-size="64" letter-spacing="10" fill="url(#gold)" filter="url(#glow)">EX LIBRIS</text>
+  <text x="190" y="202" font-family="Georgia, 'Times New Roman', serif" font-size="30" letter-spacing="14" fill="#e9dfcf" opacity="0.9">BOOKPLATE</text>
+  <line x1="190" y1="226" x2="560" y2="226" stroke="url(#gold)" stroke-width="1.5" opacity="0.8"/>
+  <text x="190" y="258" font-family="ui-sans-serif, system-ui, sans-serif" font-size="17" letter-spacing="1.5" fill="#bdb4a5">An iBooks-style shelf for Obsidian · 豆瓣 × 番茄</text>
+</svg>
