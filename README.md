@@ -73,7 +73,7 @@ GPL-3.0-or-later. Not affiliated with ByteDance / Fanqie, Douban, Obsidian, or C
 > Ex Libris 是拉丁语“某某的藏书中”，指贴在自己书封内侧的那张小纸片——藏书票。
 > 这个插件做的事就是同一件：把散落在豆瓣和番茄里的东西，一张一张盖上“我的”印章，收进自己的书架。
 
-Obsidian 桌面插件（Windows）。把 `obsidian-douban` 导入的书影音和番茄小说聚合成一个
+Obsidian 桌面插件（Windows）。把豆瓣（内建搜索，或 `obsidian-douban` 导入）与番茄小说聚合成一个
 iBooks 风格书架，并在 Obsidian 内直接阅读番茄章节、把摘录带出处地送回笔记、点回跳回到原文位置。
 
 **下载安装**：[GitHub Releases](https://github.com/Yolkbun/obsidian-ex-libris/releases/latest)
@@ -109,7 +109,8 @@ iBooks 风格书架，并在 Obsidian 内直接阅读番茄章节、把摘录带
 
 | 能力 | 状态 |
 |---|---|
-| 从 `obsidian-douban` 的 frontmatter 读书影音条目 | ✅ 只读，不改写豆瓣笔记 |
+| 内建豆瓣搜索：书/影/剧，选中加入 | ✅ 公开接口，不需要登录 |
+| 联动 `obsidian-douban`（可开关） | ✅ 只读，不改写豆瓣笔记 |
 | iBooks 质感封面墙（2:3、书脊、悬停、来源徽标、占位封面、进度条） | ✅ |
 | Bases 自定义视图 `ex-libris-shelf`（1.10+ API，失败降级） | ✅ |
 | 书架 ItemView：全部 / 在读 / 今年读完 / 想读 + 类型筛选 + 自定义预设 | ✅ |
@@ -345,18 +346,22 @@ stdin EOF 退出、闲置退出、父进程消失退出、`DEVICE_EXPIRED` 重�
 每个版本都有独立 release notes，汇总见 [**CHANGELOG.md**](CHANGELOG.md)；
 发布记录在 [GitHub Releases](https://github.com/Yolkbun/obsidian-ex-libris/releases)。
 
+发布流程：先写 `release-notes/<version>.md` 并更新 `CHANGELOG.md`，再跑
+`scripts/make-release.ps1`（缺 notes 会直接报错），最后把 notes 原文作为 GitHub release body。
+
 ## 许可证与来源
 
 - 本插件：**GPL-3.0-or-later**，见 [`LICENSE`](LICENSE)。
 - 侧车、fqapp 适配层与 vendored 源码：
   [`Yolkbun/ex-libris-sidecar`](https://github.com/Yolkbun/ex-libris-sidecar)（GPL-3.0，
   含 [ch6vip/fqapp](https://github.com/ch6vip/fqapp) 的完整对应源码与署名）。
-- 豆瓣数据由 [Wanxp/obsidian-douban](https://github.com/Wanxp/obsidian-douban) 生产，本项目只读。
+- 内建豆瓣搜索读取豆瓣公开页面；`obsidian-douban` 导入的笔记只读。
+  豆瓣数据版权归豆瓣及相应权利人。
 - 详见 [`NOTICE`](NOTICE)。
 
 ## 常见问题
 
-**书架是空的？** 只认 frontmatter：豆瓣用 obsidian-douban 导入，番茄用“从链接加入”。
+**书架是空的？** 只认 frontmatter：豆瓣用 **＋ 豆瓣** 搜索加入（或 `obsidian-douban` 导入），番茄用“从链接加入”。
 
 **番茄入口灰的？** 设置页看“重启并检查”，会显示侧车状态与 stderr 最后 20 行。
 
