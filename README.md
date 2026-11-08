@@ -1,5 +1,7 @@
 # Ex Libris 藏书票
 
+> Community display name: **Ex Libris Bookplate**（`manifest.json` 的 `name` 只允许 Basic Latin）。
+
 > Ex Libris 是拉丁语“某某的藏书中”，指贴在自己书封内侧的那张小纸片——藏书票。
 > 这个插件做的事就是同一件：把散落在豆瓣和番茄里的东西，一张一张盖上“我的”印章，收进自己的书架。
 
@@ -20,7 +22,7 @@ iBooks 风格书架，并在 Obsidian 内直接阅读番茄章节、把摘录带
 | **摘录带出处与回跳** | **设置与侧车状态** |
 | ![摘录](docs/screenshots/ui-excerpt.png) | ![设置](docs/screenshots/ui-settings.png) |
 
-截图来自测试 vault（Obsidian 1.15.0，Windows，100% 缩放）。
+截图来自测试 vault（Obsidian 1.15.0，Windows，100% 缩放）。截图中的标签仍显示旧中文名；`0.1.2` 起社区显示名改为 **Ex Libris Bookplate**（Obsidian 要求 Basic Latin）。
 
 首次运行且没有侧车时，会弹一次安装引导（可勾选“不再提示”，也可以在设置里重新打开）：
 
