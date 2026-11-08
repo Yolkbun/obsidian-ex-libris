@@ -11,7 +11,7 @@
 [![License](https://img.shields.io/github/license/Yolkbun/obsidian-ex-libris?style=for-the-badge)](LICENSE)
 ![Obsidian](https://img.shields.io/badge/Obsidian-1.10%2B-7c3aed?style=for-the-badge)
 ![Windows](https://img.shields.io/badge/platform-Windows-0078d4?style=for-the-badge)
-![Tests](https://img.shields.io/badge/tests-44%20passing-2ea44f?style=for-the-badge)
+![Tests](https://img.shields.io/badge/tests-45%20passing-2ea44f?style=for-the-badge)
 
 [![GitHub stars](https://img.shields.io/github/stars/Yolkbun/obsidian-ex-libris?style=social)](https://github.com/Yolkbun/obsidian-ex-libris)
 [![Showcase](https://img.shields.io/badge/showcase-yolkbun.me%2Fobsidian--ex--libris-1c241f?style=flat-square)](https://yolkbun.me/obsidian-ex-libris/)
@@ -71,6 +71,7 @@ Ex Libris Bookplate 是一个 **Obsidian 桌面插件（Windows）**，把三种
 | **豆瓣双通道** | 内建搜索（书/影/剧/音） + 可选联动 `obsidian-douban`（只读） |
 | **番茄阅读器** | 38em 单栏、翻章、断点续读、书评、键盘快捷键 |
 | **摘录回跳** | `Ctrl+Shift+E` 插入引用 + 出处 + `obsidian://` 回跳 |
+| **选中批注** | 选中文字可 高亮 / 改字体颜色 / 复制；只有高亮或改色才自动导出批注 |
 | **可控导出** | 单章 / 整本；正文默认不落盘，只在导出时写入 |
 | **连载追更** | 目录刷新间隔（0 = 每次打开都拉），或手动“刷新当前书目录” |
 | **本地优先** | 无账号、无遥测；token 不落盘；侧车只监听 `127.0.0.1` |
@@ -166,6 +167,7 @@ powershell -NoProfile -File scripts/install.ps1 -VaultPath "D:\YourVault" -Enabl
 | 翻章 | `←` / `→` 或 `j` / `k` |
 | 导出本章 | `Ctrl+E` / 阅读器顶部按钮 |
 | 摘录选中文字 | `Ctrl+Shift+E`，插入到 `## 摘录` 下 |
+| 高亮 / 改色 / 复制 | 选中文字后浮出工具条；高亮/改色自动写批注笔记，复制不落盘 |
 | 回跳原文 | 点摘录里的 `obsidian://ex-libris?...` 链接 |
 | 导出整本 | 命令 **导出整本番茄书**（唯一会落盘正文的路径） |
 | 连载更新 | 命令 **刷新当前书目录**，或设置 **目录刷新间隔** |
@@ -233,6 +235,7 @@ powershell -NoProfile -File scripts/install.ps1 -VaultPath "D:\YourVault" -Enabl
 <vault>/.obsidian/plugins/ex-libris/
   data/progress.json        # 阅读位置，5s 节流原子写
   data/meta.json            # 预设 / 侧车状态 / stderr 尾巴
+  data/annotations.json     # 高亮/改色记录（重开章节恢复视觉）
   cache/chapters/**         # 正文缓存，可整目录删除
   cache/toc/*.json
   cache/covers/*.jpg
@@ -240,7 +243,8 @@ powershell -NoProfile -File scripts/install.ps1 -VaultPath "D:\YourVault" -Enabl
 
 - token 每次启动随机生成，只走环境变量 `FQ_TOKEN`，不落盘；日志里替换成 `***`。
 - 插件没有遥测、没有更新检查；只有你主动搜索/阅读/本地化封面时才发请求。
-- 正文只进 `cache/` 与显式导出目录，笔记里只有 frontmatter；`Ctrl+F` 搜不到正文。
+- 正文只进 `cache/` 与显式导出目录；普通阅读和复制不落盘。
+- 高亮/改色会写 `annotations/` 笔记与 `data/annotations.json`，这是“确实发生编辑”后的本地产物。
 - 侧车只监听 `127.0.0.1`，无窗口、无托盘、不写注册表。
 
 ### 网络使用披露
@@ -261,14 +265,14 @@ powershell -NoProfile -File scripts/install.ps1 -VaultPath "D:\YourVault" -Enabl
 npm install
 npm run dev        # esbuild watch
 npm run build      # bundle + tsc --noEmit
-npm test           # 44 个无头测试
+npm test           # 45 个无头测试
 ```
 
 测试覆盖渲染纯函数、frontmatter 补写、筛选、摘录、缓存清理、原子写、路径穿越；
 插件加载/视图注册/Bases/书架渲染；侧车 token、检索、正文、书评、退出与重启；
 阅读器翻章、进度、断点续读、回跳；真实 `bin/fqsidecar.exe` 生命周期。
 
-当前：**44 passed / 0 failed**。真实 Obsidian 1.15.0 中已验证书架、阅读器、豆瓣搜索与番茄接口。
+当前：**45 passed / 0 failed**。真实 Obsidian 1.15.0 中已验证书架、阅读器、豆瓣搜索与番茄接口。
 
 每个版本都有独立 release notes：先写 `release-notes/<version>.md` 并更新
 [`CHANGELOG.md`](CHANGELOG.md)，`scripts/make-release.ps1` 缺 notes 会直接报错。

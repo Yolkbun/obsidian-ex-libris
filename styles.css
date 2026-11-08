@@ -806,3 +806,64 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+/* --- 选中文字批注工具条 ------------------------------------------------ */
+
+.ex-libris-annotate-toolbar {
+  position: fixed;
+  z-index: var(--layer-popover, 1000);
+  display: none;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 7px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 8px;
+  background: var(--background-primary);
+  box-shadow: 0 8px 24px -12px rgba(0, 0, 0, 0.45);
+  transform: translateX(-50%);
+}
+
+.ex-libris-annotate-action,
+.ex-libris-annotate-color {
+  height: 26px;
+  padding: 0 7px;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--text-normal);
+  font-size: 12px;
+  line-height: 1;
+  box-shadow: none;
+  cursor: pointer;
+}
+
+.ex-libris-annotate-action:hover,
+.ex-libris-annotate-color:hover {
+  background: var(--background-modifier-hover);
+}
+
+.ex-libris-annotate-color {
+  padding: 0 4px;
+  font-size: 18px;
+}
+
+.ex-libris-annotate-color.is-red { color: #c0392b; }
+.ex-libris-annotate-color.is-blue { color: #2471a3; }
+.ex-libris-annotate-color.is-green { color: #1e8449; }
+
+.ex-annotation {
+  border-radius: 2px;
+}
+
+.ex-annotation.ex-hl-yellow {
+  background: rgba(246, 214, 92, 0.55);
+  box-shadow: inset 0 -1px 0 rgba(169, 127, 69, 0.35);
+}
+
+.ex-annotation.ex-hl-red { background: rgba(231, 76, 60, 0.22); }
+.ex-annotation.ex-hl-blue { background: rgba(52, 152, 219, 0.22); }
+.ex-annotation.ex-hl-green { background: rgba(46, 204, 113, 0.22); }
+
+.ex-annotation.ex-fg-red { color: #c0392b; }
+.ex-annotation.ex-fg-blue { color: #2471a3; }
+.ex-annotation.ex-fg-green { color: #1e8449; }

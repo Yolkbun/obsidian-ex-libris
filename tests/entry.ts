@@ -7,6 +7,8 @@ export { buildExcerptBlock, appendUnderExcerptHeading, excerptLink } from "../sr
 export { extractUrl } from "../src/actions/add-from-url";
 export { fanqieNotePath, createFanqieNote, writeReadingSummary } from "../src/library/fanqie-note";
 export { createDoubanNote, doubanCoverUrl, doubanNotePath, searchDouban } from "../src/library/douban";
+export { AnnotationStore } from "../src/annotations/store";
+export { appendAnnotationNote } from "../src/library/annotation-note";
 export { coverHeaders } from "../src/library/cover";
 export { chapterBody, chapterFilePath } from "../src/library/exporter";
 export { EntryIndex, toShelfItem } from "../src/library/entries";

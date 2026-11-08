@@ -565,3 +565,43 @@ test("章节目录：列表、当前章、搜索与跳转", async () => {
   modal.contentEl.querySelector(".ex-libris-toc-row").click();
   assert.equal(picked, "c3");
 });
+
+test("批注：只在高亮/改色时写笔记，选中文字与所在段落都导出", async () => {
+  const root = await makeRoot();
+  const { app } = await api.createTestApp({ root });
+  const store = new api.AnnotationStore(app.vault.adapter, "data/annotations.json");
+  await store.init();
+  const record = await store.add("book-1", "chapter-1", {
+    text: "这句被高亮",
+    paragraph: "这是整段文字，这句被高亮，后面还有内容。",
+    paragraphIndex: 2,
+    kind: "highlight",
+    color: "yellow",
+  });
+  assert.equal(store.list("book-1", "chapter-1").length, 1);
+  const first = await api.appendAnnotationNote(app, { libraryRoot: "Library" }, {
+    bookId: "book-1",
+    bookTitle: "十日终焉",
+    chapterId: "chapter-1",
+    chapterTitle: "第 1 章 空屋",
+    chapterIndex: 0,
+    record,
+  });
+  let text = await app.vault.read(first);
+  assert.ok(text.includes("高亮（黄色）"));
+  assert.ok(text.includes("这句被高亮"));
+  assert.ok(text.includes("这是整段文字"));
+  assert.ok(!text.includes("fq_book_id"));
+
+  await api.appendAnnotationNote(app, { libraryRoot: "Library" }, {
+    bookId: "book-1",
+    bookTitle: "十日终焉",
+    chapterId: "chapter-1",
+    chapterTitle: "第 1 章 空屋",
+    chapterIndex: 0,
+    record: { ...record, id: "r2", kind: "color", color: "red", text: "后面还有内容" },
+  });
+  text = await app.vault.read(first);
+  assert.ok(text.includes("字体颜色（红色）"));
+  assert.ok(text.includes("后面还有内容"));
+});

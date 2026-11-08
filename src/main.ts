@@ -23,6 +23,8 @@ import {
 } from "./library/fanqie-note";
 import { exportChapterFile } from "./library/exporter";
 import { ProgressStore } from "./progress/store";
+import { AnnotationStore } from "./annotations/store";
+import { appendAnnotationNote, type AnnotationNoteInput } from "./library/annotation-note";
 import { createSidecarHost, type SidecarHost } from "./sidecar/host";
 import { SidecarClient, SidecarError } from "./sidecar/client";
 import { SidecarCache } from "./sidecar/cache";
@@ -54,6 +56,7 @@ export default class ExLibrisPlugin extends Plugin {
   covers!: CoverResolver;
   entries!: EntryIndex;
   progress!: ProgressStore;
+  annotations!: AnnotationStore;
   cacheCleaner!: CacheCleaner;
   sidecar!: SidecarManager;
   client!: SidecarClient;
@@ -129,6 +132,11 @@ export default class ExLibrisPlugin extends Plugin {
     }
     try {
       await this.progress?.flush();
+    } catch {
+      /* ignore */
+    }
+    try {
+      await this.annotations?.flush();
     } catch {
       /* ignore */
     }
@@ -229,6 +237,11 @@ export default class ExLibrisPlugin extends Plugin {
       await this.metaStore.load();
       await this.covers.init();
       await this.progress.init();
+      this.annotations = new AnnotationStore(
+        this.app.vault.adapter,
+        joinPath(this.pluginDirRelative(), "data", "annotations.json"),
+      );
+      await this.annotations.init();
       await this.entries.init();
       await this.cacheCleaner.maybeCleanupOnStartup();
       await this.covers.init();
@@ -279,6 +292,8 @@ export default class ExLibrisPlugin extends Plugin {
           writeSummary: (summary) => this.writeSummary(summary),
           exportChapter: (bookId, chapterId) => this.exportChapterById(bookId, chapterId),
           requestExcerpt: (payload) => this.handleExcerpt(payload),
+          annotations: this.annotations,
+          writeAnnotation: (input) => this.writeAnnotation(input),
         }),
     );
 
@@ -713,6 +728,10 @@ export default class ExLibrisPlugin extends Plugin {
   // ---------------------------------------------------------------------
   // 阅读进度 / 摘要
   // ---------------------------------------------------------------------
+
+  private async writeAnnotation(input: AnnotationNoteInput): Promise<void> {
+    await appendAnnotationNote(this.app, this.settings, input);
+  }
 
   private async writeSummary(summary: ReadingSummary): Promise<void> {
     const file = findNoteFile(this.app, this.entries, summary.bookId);
