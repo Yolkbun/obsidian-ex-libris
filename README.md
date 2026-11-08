@@ -64,7 +64,7 @@ iBooks 风格书架，并在 Obsidian 内直接阅读番茄章节、把摘录带
 
 ### 方式 A：从 GitHub Release 安装（推荐）
 
-**插件本体**（[最新 Release](https://github.com/Yolkbun/obsidian-ex-libris/releases/latest)）只有三个文件：
+**插件本体**（[最新 Release](https://github.com/Yolkbun/obsidian-ex-libris/releases/latest)）提供三个文件（另附一个纯插件 zip）：
 
 | 文件 | 放到 |
 |---|---|
