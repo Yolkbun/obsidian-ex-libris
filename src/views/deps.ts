@@ -20,4 +20,5 @@ export interface ShelfUiDeps {
   restartSidecar: () => Promise<void>;
   refreshUnread?: () => Promise<void>;
   openAddBooks: () => void;
+  openDoubanSearch: () => void;
 }

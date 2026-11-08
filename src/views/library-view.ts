@@ -221,7 +221,13 @@ export class LibraryView extends ItemView {
     count.className = "ex-libris-count";
     count.textContent = `${visible.length} / ${allItems.length} 项`;
 
-    toolbar.append(chips, spacer, addButton, count);
+    const doubanButton = doc.createElement("button");
+    doubanButton.className = "ex-libris-chip ex-libris-douban-button";
+    doubanButton.textContent = "＋ 豆瓣";
+    doubanButton.title = "搜索豆瓣书/影/剧并加入书架";
+    doubanButton.addEventListener("click", () => this.deps.openDoubanSearch());
+
+    toolbar.append(chips, spacer, addButton, doubanButton, count);
     main.append(toolbar);
 
     if (!this.deps.isSidecarReady()) {

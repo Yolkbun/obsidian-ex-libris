@@ -6,6 +6,7 @@
 
 **Ex Libris Bookplate** turns Douban and Fanqie notes into an iBooks-style bookshelf inside Obsidian.
 
+- Search Douban (books, movies, TV) and add entries directly, without `obsidian-douban`
 - iBooks-style shelf and a registered Bases view (`ex-libris-shelf`), with covers, progress, presets and type filters
 - Read Fanqie chapters inside Obsidian, with per-chapter progress and resume
 - Select text → `Ctrl+Shift+E` → insert a quote with source and an `obsidian://ex-libris?...` back-jump link
@@ -27,7 +28,7 @@ The plugin never downloads, installs, or updates the sidecar automatically. If i
 
 ### Network and file access
 
-- **Network**: the sidecar calls the Fanqie upstream from `127.0.0.1`; covers are fetched from Douban/Fanqie image hosts. No telemetry, no analytics.
+- **Network**: the sidecar calls the Fanqie upstream from `127.0.0.1`; Douban search uses Douban's public suggest endpoint; covers are fetched from Douban/Fanqie image hosts. No telemetry, no analytics.
 - **Filesystem / shell**: the plugin checks whether `bin/fqsidecar.exe` exists and spawns it with `child_process` on loopback. A user-configured sidecar path may point outside the vault.
 - **Vault enumeration**: the shelf is built by reading frontmatter of Markdown files through Obsidian's metadata cache; read-only.
 
@@ -160,7 +161,8 @@ powershell -NoProfile -File scripts/install.ps1 -VaultPath "D:\YourVault" -Enabl
 
 - **有链接**：`Ctrl+P` → **从链接加入书架**，粘贴 `fanqienovel.com/page/<id>`（整段分享文案也可以）。
 - **只知道书名**：书架工具栏 **＋ 添加番茄书**，或 `Ctrl+P` → **搜索番茄小说并加入**；勾选后批量加入，或右键单本加入。
-- **豆瓣**：先用 `obsidian-douban` 导入，书架会自动出现；不需要侧车。
+- **豆瓣**：书架工具栏 **＋ 豆瓣**，或 `Ctrl+P` → **搜索豆瓣并加入**；支持书/影/剧，不需要 `obsidian-douban`，也不需要侧车。
+- 已经用 `obsidian-douban` 导入的条目仍会被识别，两种方式可以共存。
 
 加完若书架没显示，执行 **重建书架缓存**。详细步骤、重复处理、失败排查见
 [使用指南 §3 添加内容](docs/使用指南.md#3-添加内容)。
@@ -177,6 +179,7 @@ powershell -NoProfile -File scripts/install.ps1 -VaultPath "D:\YourVault" -Enabl
 | `添加书架预设` | 状态/类型/来源/标签 |
 | `重启番茄侧车` | 显示 `/health` 结果 |
 | `刷新当前书目录` | 立即重新拉取当前/选中番茄书的目录 |
+| `搜索豆瓣并加入` | 搜索豆瓣书/影/剧并加入书架 |
 | `本地化所有远程封面` | 断网可读 |
 | `清理章节与封面缓存` / `重建书架缓存` | 维护 |
 

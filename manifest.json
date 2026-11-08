@@ -1,7 +1,7 @@
 {
   "id": "ex-libris",
   "name": "Ex Libris Bookplate",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "minAppVersion": "1.10.0",
   "description": "Turn Douban and Fanqie notes into an iBooks-style bookshelf, and send excerpts back to your notes with back-links.",
   "author": "Yolkbun",

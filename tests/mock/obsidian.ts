@@ -873,6 +873,23 @@ export function requestUrl(request: {
   headers: Record<string, string>;
 }> {
   return (async () => {
+    const handler = (
+      globalThis as unknown as {
+        __requestUrlHandler?: (request: {
+          url: string;
+          method?: string;
+          headers?: Record<string, string>;
+          body?: string;
+        }) => Promise<{
+          status: number;
+          text: string;
+          json: unknown;
+          arrayBuffer: ArrayBuffer;
+          headers: Record<string, string>;
+        }>;
+      }
+    ).__requestUrlHandler;
+    if (handler) return handler(request);
     const response = await fetch(request.url, {
       method: request.method ?? "GET",
       headers: request.headers,

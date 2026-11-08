@@ -732,3 +732,7 @@
   background: var(--interactive-accent-hover);
   color: var(--text-on-accent);
 }
+
+.ex-libris-douban-button {
+  white-space: nowrap;
+}

@@ -5,6 +5,7 @@ export { resolveChapterParam } from "../src/views/reader-view";
 export { buildExcerptBlock, appendUnderExcerptHeading, excerptLink } from "../src/actions/export-excerpt";
 export { extractUrl } from "../src/actions/add-from-url";
 export { fanqieNotePath, createFanqieNote, writeReadingSummary } from "../src/library/fanqie-note";
+export { createDoubanNote, doubanNotePath, searchDouban } from "../src/library/douban";
 export { chapterBody, chapterFilePath } from "../src/library/exporter";
 export { EntryIndex, toShelfItem } from "../src/library/entries";
 export { CoverResolver } from "../src/library/cover";

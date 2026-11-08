@@ -395,3 +395,72 @@ test("frontmatter 夹具能被 EntryIndex 识别为番茄条目", async () => {
   assert.equal(item.bookId, "7143038691944959011");
   assert.equal(item.source, "fanqie");
 });
+
+test("豆瓣条目：生成 frontmatter、重复跳过", async () => {
+  const root = await makeRoot();
+  const { app } = await api.createTestApp({ root });
+  const covers = { downloadTo: async () => false };
+  const settings = { libraryRoot: "Library" };
+  const item = {
+    id: "36573581",
+    title: "十日终焉·囚笼",
+    author: "杀虫队队员",
+    year: "2023",
+    coverUrl: "",
+    type: "book",
+  };
+  const first = await api.createDoubanNote(app, settings, covers, item);
+  assert.equal(first.created, true);
+  const text = await app.vault.read(first.file);
+  assert.ok(text.includes("type: book"));
+  assert.ok(text.includes('id: "36573581"'));
+  assert.ok(text.includes("myState: 想读"));
+  assert.ok(text.includes("datePublished:"));
+  assert.ok(text.includes("2023"));
+
+  const again = await api.createDoubanNote(app, settings, covers, item);
+  assert.equal(again.created, false);
+  assert.equal(again.skipped, true);
+  assert.equal(api.doubanNotePath(settings, item.title), "Library/douban/十日终焉·囚笼.md");
+});
+
+test("豆瓣搜索：解析书籍 JSON、影剧类型识别、非 JSON 报错", async () => {
+  globalThis.__requestUrlHandler = async (request) => {
+    assert.ok(request.url.startsWith("https://book.douban.com/j/subject_suggest"));
+    return {
+      status: 200,
+      text: JSON.stringify([
+        { id: "36573581", title: "十日终焉·囚笼", author_name: "杀虫队队员", year: "2023", pic: "https://img.example/1.jpg", type: "b" },
+      ]),
+      json: null,
+      arrayBuffer: new ArrayBuffer(0),
+      headers: {},
+    };
+  };
+  const books = await api.searchDouban("book", "十日终焉");
+  assert.equal(books.length, 1);
+  assert.equal(books[0].type, "book");
+  assert.equal(books[0].author, "杀虫队队员");
+
+  globalThis.__requestUrlHandler = async () => ({
+    status: 200,
+    text: JSON.stringify([
+      { id: "36675856", title: "十日终焉", year: "2027", img: "https://img.example/2.jpg", type: "movie", episode: "24" },
+    ]),
+    json: null,
+    arrayBuffer: new ArrayBuffer(0),
+    headers: {},
+  });
+  const screen = await api.searchDouban("screen", "十日终焉");
+  assert.equal(screen[0].type, "tv");
+
+  globalThis.__requestUrlHandler = async () => ({
+    status: 200,
+    text: "<html>captcha</html>",
+    json: null,
+    arrayBuffer: new ArrayBuffer(0),
+    headers: {},
+  });
+  await assert.rejects(() => api.searchDouban("book", "x"), /非 JSON/);
+  delete globalThis.__requestUrlHandler;
+});

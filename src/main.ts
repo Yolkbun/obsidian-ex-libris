@@ -43,6 +43,8 @@ import {
 } from "./actions/export-excerpt";
 import { linkDouban } from "./actions/link-douban";
 import { SidecarGuideModal } from "./actions/sidecar-guide";
+import { DoubanSearchModal } from "./actions/douban-search-modal";
+import { createDoubanNote, type DoubanItem } from "./library/douban";
 
 export default class ExLibrisPlugin extends Plugin {
   override settings: ExLibrisSettings = { ...DEFAULT_SETTINGS };
@@ -311,6 +313,7 @@ export default class ExLibrisPlugin extends Plugin {
       restartSidecar: () => this.restartAndReport(),
       refreshUnread: () => this.refreshUnreadCounts(),
       openAddBooks: () => this.openFanqieSearch(),
+      openDoubanSearch: () => this.openDoubanSearch(),
     };
   }
 
@@ -375,6 +378,12 @@ export default class ExLibrisPlugin extends Plugin {
       id: "restart-sidecar",
       name: "重启番茄侧车",
       callback: () => void this.restartAndReport(),
+    });
+
+    this.addCommand({
+      id: "search-douban",
+      name: "搜索豆瓣并加入",
+      callback: () => this.openDoubanSearch(),
     });
 
     this.addCommand({
@@ -511,6 +520,23 @@ export default class ExLibrisPlugin extends Plugin {
   // ---------------------------------------------------------------------
   // 打开 / 导航
   // ---------------------------------------------------------------------
+
+  /** 书架工具栏的“豆瓣”按钮，也供命令面板复用。 */
+  openDoubanSearch(): void {
+    new DoubanSearchModal(this.app, (items) => this.addDoubanItems(items)).open();
+  }
+
+  private async addDoubanItems(items: DoubanItem[]): Promise<void> {
+    let created = 0;
+    let skipped = 0;
+    for (const item of items) {
+      const result = await createDoubanNote(this.app, this.settings, this.covers, item);
+      if (result.created) created += 1;
+      if (result.skipped) skipped += 1;
+    }
+    this.refreshShelves();
+    new Notice(`豆瓣：新增 ${created} 项${skipped ? `，跳过 ${skipped} 项（已在书架）` : ""}`);
+  }
 
   /** 书架工具栏的“添加番茄书”按钮，也供命令面板复用。 */
   openFanqieSearch(): void {
