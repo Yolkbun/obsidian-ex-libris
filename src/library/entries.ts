@@ -6,7 +6,7 @@ const YEAR_FIELDS = ["myCollectionDate", "datePublished", "created", "fq_last_re
 
 const READING_STATES = new Set(["在读", "在看", "在读中", "在追", "追更", "do", "doing", "reading"]);
 const FINISHED_STATES = new Set(["读完", "看完", "读过", "collect", "done", "finished"]);
-const WANT_STATES = new Set(["想读", "想看", "wish", "todo"]);
+const WANT_STATES = new Set(["想读", "想看", "想听", "wish", "todo"]);
 
 export function isFanqieFrontmatter(fm: Record<string, unknown>): boolean {
   return typeof fm.fq_book_id === "string" && fm.fq_book_id.trim() !== "";

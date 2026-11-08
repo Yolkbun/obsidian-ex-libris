@@ -523,3 +523,25 @@ test("豆瓣封面：换大图并带 Referer 下载", async () => {
   assert.ok(await app.vault.adapter.exists("Library/assets/covers/douban-36573581.jpg"));
   delete globalThis.__requestUrlHandler;
 });
+
+test("豆瓣音乐：解析 search page 的 window.__DATA__", async () => {
+  const html = `<script>window.__DATA__ = {"error_info":"","items":[{"id":1403307,"title":"范特西 / Fantasy","abstract":"周杰伦 / 2001-09-14 / 专辑 / CD / 流行","cover_url":"https://img3.doubanio.com/view/subject/m/public/s35019288.jpg","tpl_name":"search_subject"},{"id":1,"title":"艺术家","tpl_name":"search_common"}],"total":2};</script>`;
+  globalThis.__requestUrlHandler = async (request) => {
+    assert.ok(request.url.startsWith("https://search.douban.com/music/subject_search"));
+    return {
+      status: 200,
+      text: html,
+      json: null,
+      arrayBuffer: new ArrayBuffer(0),
+      headers: {},
+    };
+  };
+  const items = await api.searchDouban("music", "范特西");
+  assert.equal(items.length, 1);
+  assert.equal(items[0].type, "music");
+  assert.equal(items[0].title, "范特西 / Fantasy");
+  assert.equal(items[0].author, "周杰伦");
+  assert.equal(items[0].year, "2001");
+  assert.ok(api.doubanCoverUrl(items[0].coverUrl).includes("/view/subject/l/public/"));
+  delete globalThis.__requestUrlHandler;
+});

@@ -7,7 +7,7 @@
 | `Yolkbun/obsidian-ex-libris` | 纯插件：`src/`、测试、README | ✅ 提交这个 |
 | `Yolkbun/ex-libris-sidecar` | GPL 侧车：fqapp 适配层、vendored 源码、exe | ❌ 不提交 |
 
-## 插件 Release（0.1.9）
+## 插件 Release（0.2.0）
 
 只上传 Obsidian 安装器认的三个文件：
 
@@ -19,7 +19,7 @@
 
 - `sidecar-0.1.0`（标记 Pre-release）
   - `fqsidecar.exe`
-  - `ex-libris-full-0.1.9.zip`（插件三件套 + `bin/fqsidecar.exe`）
+  - `ex-libris-full-0.2.0.zip`（插件三件套 + `bin/fqsidecar.exe`）
   - `SHA256SUMS.txt`
 
 ## 提交社区目录
@@ -32,7 +32,7 @@
    https://github.com/Yolkbun/obsidian-ex-libris
    ```
 
-4. 目录会读取默认分支 `main` 的 `manifest.json`（当前 `0.1.9`）。
+4. 目录会读取默认分支 `main` 的 `manifest.json`（当前 `0.2.0`）。
 5. 自动审查；有问题按提示改，然后发新的插件 release 并递增版本。
 
 ## 必须写进 README 的披露（已写）
@@ -56,7 +56,7 @@
 - [x] `isDesktopOnly=true`
 - [x] 命令 id 不含插件前缀
 - [x] README 有 LICENSE、网络披露、侧车手动安装说明、免责声明
-- [x] 插件 release `0.1.9` 只含三件套
+- [x] 插件 release `0.2.0` 只含三件套
 - [x] 侧车 release 独立仓库、Pre-release
 - [x] `versions.json` 已提交
 - [x] `release-notes/<version>.md` 已写，并作为 GitHub release body

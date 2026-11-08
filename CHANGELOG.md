@@ -5,6 +5,13 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), version
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-11-08
+
+### Added
+
+- Built-in Douban music search (albums/artists) with batch add, `music` type and `想听` default.
+- Douban search modal now has 书 / 影·剧 / 音 tabs.
+
 ## [0.1.9] - 2026-11-08
 
 ### Added
@@ -92,7 +99,8 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), version
 
 - iBooks-style shelf, Bases view, Douban frontmatter reading, Fanqie search/read/excerpt/export, sidecar.
 
-[Unreleased]: https://github.com/Yolkbun/obsidian-ex-libris/compare/0.1.9...HEAD
+[Unreleased]: https://github.com/Yolkbun/obsidian-ex-libris/compare/0.2.0...HEAD
+[0.2.0]: https://github.com/Yolkbun/obsidian-ex-libris/compare/0.1.9...0.2.0
 [0.1.9]: https://github.com/Yolkbun/obsidian-ex-libris/compare/0.1.8...0.1.9
 [0.1.8]: https://github.com/Yolkbun/obsidian-ex-libris/compare/0.1.7...0.1.8
 [0.1.7]: https://github.com/Yolkbun/obsidian-ex-libris/compare/0.1.6...0.1.7

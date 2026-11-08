@@ -11,7 +11,7 @@
 [![License](https://img.shields.io/github/license/Yolkbun/obsidian-ex-libris?style=for-the-badge)](LICENSE)
 ![Obsidian](https://img.shields.io/badge/Obsidian-1.10%2B-7c3aed?style=for-the-badge)
 ![Windows](https://img.shields.io/badge/platform-Windows-0078d4?style=for-the-badge)
-![Tests](https://img.shields.io/badge/tests-42%20passing-2ea44f?style=for-the-badge)
+![Tests](https://img.shields.io/badge/tests-43%20passing-2ea44f?style=for-the-badge)
 
 [![GitHub stars](https://img.shields.io/github/stars/Yolkbun/obsidian-ex-libris?style=social)](https://github.com/Yolkbun/obsidian-ex-libris)
 [![Showcase](https://img.shields.io/badge/showcase-yolkbun.me%2Fobsidian--ex--libris-1c241f?style=flat-square)](https://yolkbun.me/obsidian-ex-libris/)
@@ -68,7 +68,7 @@ Ex Libris Bookplate 是一个 **Obsidian 桌面插件（Windows）**，把三种
 | **iBooks 风格书架** | 2:3 封面、书脊、悬停、来源徽标、占位封面、阅读进度条 |
 | **Bases 视图** | 注册 `ex-libris-shelf`，可在 `.base` 里选封面宽度与进度开关 |
 | **分类分开** | 番茄小说归为「小说」，豆瓣书归为「书」；筛选片独立计数 |
-| **豆瓣双通道** | 内建搜索（书/影/剧） + 可选联动 `obsidian-douban`（只读） |
+| **豆瓣双通道** | 内建搜索（书/影/剧/音） + 可选联动 `obsidian-douban`（只读） |
 | **番茄阅读器** | 38em 单栏、翻章、断点续读、书评、键盘快捷键 |
 | **摘录回跳** | `Ctrl+Shift+E` 插入引用 + 出处 + `obsidian://` 回跳 |
 | **可控导出** | 单章 / 整本；正文默认不落盘，只在导出时写入 |
@@ -153,7 +153,7 @@ powershell -NoProfile -File scripts/install.ps1 -VaultPath "D:\YourVault" -Enabl
 
 - **有链接**：`Ctrl+P` → **从链接加入书架**，粘贴 `fanqienovel.com/page/<id>`（整段分享文案也可以）。
 - **只知道书名**：书架工具栏 **＋ 添加番茄书**，或 `Ctrl+P` → **搜索番茄小说并加入**；勾选批量加入，或右键单本加入。
-- **豆瓣**：书架工具栏 **＋ 豆瓣**，或 `Ctrl+P` → **搜索豆瓣并加入**；支持书/影/剧，不需要 `obsidian-douban`，也不需要侧车。
+- **豆瓣**：书架工具栏 **＋ 豆瓣**，或 `Ctrl+P` → **搜索豆瓣并加入**；支持书/影/剧/音，不需要 `obsidian-douban`，也不需要侧车。
 
 加完若书架没显示，执行 **重建书架缓存**。重复书会跳过，不覆盖你改过的字段。
 详细步骤见 [使用指南 §3 添加内容](docs/使用指南.md#3-添加内容)。
@@ -184,7 +184,7 @@ powershell -NoProfile -File scripts/install.ps1 -VaultPath "D:\YourVault" -Enabl
 | `打开书架` | 打开书架视图 |
 | `从链接加入书架` | 粘贴番茄链接 |
 | `搜索番茄小说并加入` | 搜索 + 复选批量 + 右键单本 |
-| `搜索豆瓣并加入` | 搜索豆瓣书/影/剧并加入书架 |
+| `搜索豆瓣并加入` | 搜索豆瓣书/影/剧/音并加入书架 |
 | `刷新当前书目录` | 立即重拉当前/选中番茄书的目录 |
 | `重启番茄侧车` | 显示 `/health` 结果 |
 | `导出当前章节` / `导出整本番茄书` | 导出正文 |
@@ -205,7 +205,7 @@ powershell -NoProfile -File scripts/install.ps1 -VaultPath "D:\YourVault" -Enabl
 | | 内建豆瓣搜索 | 联动 `obsidian-douban` |
 |---|---|---|
 | 登录豆瓣 | 不需要 | 需要 |
-| 数据来源 | 公开搜索（书/影/剧） | 你标记过的书影音 |
+| 数据来源 | 公开搜索（书/影/剧/音） | 你标记过的书影音 |
 | 状态/评分 | 默认 `想读` / `想看` | 保留原来的 `myState` / `myRating` |
 | 网络 | 搜索时访问豆瓣 | 导入时由 douban 插件访问 |
 | 写入 | 新建轻笔记 | **只读**，不改豆瓣笔记 |
@@ -259,14 +259,14 @@ powershell -NoProfile -File scripts/install.ps1 -VaultPath "D:\YourVault" -Enabl
 npm install
 npm run dev        # esbuild watch
 npm run build      # bundle + tsc --noEmit
-npm test           # 42 个无头测试
+npm test           # 43 个无头测试
 ```
 
 测试覆盖渲染纯函数、frontmatter 补写、筛选、摘录、缓存清理、原子写、路径穿越；
 插件加载/视图注册/Bases/书架渲染；侧车 token、检索、正文、书评、退出与重启；
 阅读器翻章、进度、断点续读、回跳；真实 `bin/fqsidecar.exe` 生命周期。
 
-当前：**42 passed / 0 failed**。真实 Obsidian 1.15.0 中已验证书架、阅读器、豆瓣搜索与番茄接口。
+当前：**43 passed / 0 failed**。真实 Obsidian 1.15.0 中已验证书架、阅读器、豆瓣搜索与番茄接口。
 
 每个版本都有独立 release notes：先写 `release-notes/<version>.md` 并更新
 [`CHANGELOG.md`](CHANGELOG.md)，`scripts/make-release.ps1` 缺 notes 会直接报错。

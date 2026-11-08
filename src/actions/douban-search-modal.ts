@@ -2,6 +2,12 @@ import { App, Menu, Modal, Notice } from "obsidian";
 import { DoubanError, searchDouban, type DoubanItem, type DoubanKind } from "../library/douban";
 import { describeError } from "./add-from-url";
 
+const KINDS: Array<[DoubanKind, string]> = [
+  ["book", "书"],
+  ["screen", "影 · 剧"],
+  ["music", "音"],
+];
+
 /**
  * 豆瓣搜索：书 / 影·剧（音乐接口目前为空，不列）。
  * 选中后加入书架；不需要侧车，失败时明确提示限流。
@@ -35,10 +41,7 @@ export class DoubanSearchModal extends Modal {
 
     const kinds = doc.createElement("div");
     kinds.className = "ex-libris-kinds";
-    for (const [kind, label] of [
-      ["book", "书"],
-      ["screen", "影 · 剧"],
-    ] as Array<[DoubanKind, string]>) {
+    for (const [kind, label] of KINDS) {
       const button = doc.createElement("button");
       button.className = "ex-libris-chip";
       button.textContent = label;
@@ -63,7 +66,7 @@ export class DoubanSearchModal extends Modal {
     bar.className = "ex-libris-search-bar";
     this.input = doc.createElement("input");
     this.input.type = "text";
-    this.input.placeholder = "书名 / 电影名 / 剧名";
+    this.input.placeholder = "书名 / 电影名 / 剧名 / 专辑名";
     this.input.setCssStyles({ flex: "1 1 auto" });
     this.input.addEventListener("keydown", (event) => {
       if (event.key === "Enter") {
@@ -100,7 +103,7 @@ export class DoubanSearchModal extends Modal {
 
   private renderKindButtons(): void {
     this.kindButtons.forEach((button, index) => {
-      button.classList.toggle("is-active", (index === 0 ? "book" : "screen") === this.kind);
+      button.classList.toggle("is-active", KINDS[index]?.[0] === this.kind);
     });
   }
 
@@ -154,7 +157,11 @@ export class DoubanSearchModal extends Modal {
     title.textContent = item.title;
     const meta = doc.createElement("div");
     meta.className = "ex-libris-search-author";
-    meta.textContent = [item.author, item.year, item.type === "book" ? "书" : item.type === "tv" ? "剧" : "电影"]
+    meta.textContent = [
+      item.author,
+      item.year,
+      item.type === "book" ? "书" : item.type === "tv" ? "剧" : item.type === "music" ? "音乐" : "电影",
+    ]
       .filter(Boolean)
       .join(" · ");
     text.append(title, meta);

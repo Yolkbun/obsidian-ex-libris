@@ -4,8 +4,8 @@ import { ensureDir, joinPath, sanitizeFilename } from "../util/paths";
 import { buildFrontmatter, parseFrontmatter } from "../util/text";
 import type { CoverResolver } from "./cover";
 
-export type DoubanKind = "book" | "screen";
-export type DoubanType = "book" | "movie" | "tv";
+export type DoubanKind = "book" | "screen" | "music";
+export type DoubanType = "book" | "movie" | "tv" | "music";
 
 export interface DoubanItem {
   id: string;
@@ -42,30 +42,112 @@ interface SuggestItem {
  * 用豆瓣搜索建议接口（公开 JSON，无需登录）。
  * 这是页面抓取，不是官方 API：豆瓣可能限流或改版，失败时给可读错误，不重试风暴。
  */
-export async function searchDouban(kind: DoubanKind, query: string): Promise<DoubanItem[]> {
-  const term = query.trim();
-  if (!term) return [];
-  const host = kind === "book" ? "https://book.douban.com" : "https://movie.douban.com";
-  const url = `${host}/j/subject_suggest?q=${encodeURIComponent(term)}`;
+function doubanHeaders(host: string): Record<string, string> {
+  return {
+    "User-Agent": UA,
+    Referer: `${host}/`,
+    Accept: "application/json,text/html;q=0.9,*/*;q=0.8",
+  };
+}
 
-  let response;
+async function getDouban(url: string, host: string): Promise<{ status: number; text: string }> {
   try {
-    response = await requestUrl({
-      url,
-      headers: {
-        "User-Agent": UA,
-        Referer: `${host}/`,
-        Accept: "application/json",
-      },
-    });
+    return await requestUrl({ url, headers: doubanHeaders(host) });
   } catch {
     // 某些 Electron 版本会拒绝自定义 User-Agent；退回默认请求头再试一次。
     try {
-      response = await requestUrl({ url });
+      return await requestUrl({ url });
     } catch (err) {
       throw new DoubanError(`豆瓣请求失败：${String(err)}`);
     }
   }
+}
+
+/** 从搜索页 HTML 里取 window.__DATA__（音乐搜索没有 subject_suggest）。 */
+function parseWindowData(html: string): Record<string, unknown> {
+  const marker = html.indexOf("window.__DATA__");
+  if (marker < 0) throw new DoubanError("豆瓣搜索页没有返回数据（可能被风控/限流）。");
+  const start = html.indexOf("{", marker);
+  if (start < 0) throw new DoubanError("豆瓣搜索页数据格式异常。");
+  let depth = 0;
+  let inString = false;
+  let escaped = false;
+  let end = -1;
+  for (let i = start; i < html.length; i++) {
+    const char = html[i];
+    if (inString) {
+      if (escaped) escaped = false;
+      else if (char === "\\") escaped = true;
+      else if (char === '"') inString = false;
+    } else if (char === '"') {
+      inString = true;
+    } else if (char === "{") {
+      depth++;
+    } else if (char === "}") {
+      depth--;
+      if (depth === 0) {
+        end = i + 1;
+        break;
+      }
+    }
+  }
+  if (end < 0) throw new DoubanError("豆瓣搜索页数据不完整。");
+  try {
+    return JSON.parse(html.slice(start, end)) as Record<string, unknown>;
+  } catch {
+    throw new DoubanError("豆瓣搜索页数据解析失败（可能改版）。");
+  }
+}
+
+interface SearchSubjectItem {
+  id?: string | number;
+  title?: string;
+  abstract?: string;
+  cover_url?: string;
+  tpl_name?: string;
+}
+
+async function searchMusic(term: string): Promise<DoubanItem[]> {
+  const host = "https://search.douban.com";
+  const url = `${host}/music/subject_search?search_text=${encodeURIComponent(term)}`;
+  const response = await getDouban(url, host);
+  if (response.status < 200 || response.status >= 300) {
+    throw new DoubanError(`豆瓣返回 HTTP ${response.status}（可能被限流）`);
+  }
+  const data = parseWindowData(response.text);
+  const error = typeof data.error_info === "string" ? data.error_info.trim() : "";
+  if (error) throw new DoubanError(error);
+  const rawItems = Array.isArray(data.items) ? (data.items as SearchSubjectItem[]) : [];
+
+  const items: DoubanItem[] = [];
+  for (const raw of rawItems) {
+    if (raw.tpl_name !== "search_subject") continue;
+    const id = String(raw.id ?? "").trim();
+    const title = raw.title?.trim();
+    if (!id || !title) continue;
+    const abstract = raw.abstract?.trim() ?? "";
+    const parts = abstract.split(" / ").map((part) => part.trim());
+    const yearMatch = /(?:19|20)\d{2}/.exec(abstract);
+    items.push({
+      id,
+      title,
+      author: parts[0] ?? "",
+      year: yearMatch ? yearMatch[0] : "",
+      coverUrl: (raw.cover_url ?? "").trim(),
+      type: "music",
+    });
+  }
+  return items;
+}
+
+export async function searchDouban(kind: DoubanKind, query: string): Promise<DoubanItem[]> {
+  const term = query.trim();
+  if (!term) return [];
+  if (kind === "music") return searchMusic(term);
+
+  const host = kind === "book" ? "https://book.douban.com" : "https://movie.douban.com";
+  const url = `${host}/j/subject_suggest?q=${encodeURIComponent(term)}`;
+  const response = await getDouban(url, host);
   if (response.status < 200 || response.status >= 300) {
     throw new DoubanError(`豆瓣返回 HTTP ${response.status}（可能被限流）`);
   }
@@ -103,6 +185,7 @@ export async function searchDouban(kind: DoubanKind, query: string): Promise<Dou
 export function doubanCoverUrl(url: string): string {
   return url
     .replace("/view/subject/s/public/", "/view/subject/l/public/")
+    .replace("/view/subject/m/public/", "/view/subject/l/public/")
     .replace("/view/photo/s_ratio_poster/public/", "/view/photo/l_ratio_poster/public/");
 }
 
@@ -154,7 +237,7 @@ export async function createDoubanNote(
     }
   }
 
-  const want = item.type === "book" ? "想读" : "想看";
+  const want = item.type === "book" ? "想读" : item.type === "music" ? "想听" : "想看";
   const frontmatter = buildFrontmatter(
     {
       type: item.type,
