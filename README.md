@@ -159,7 +159,7 @@ powershell -NoProfile -File scripts/install.ps1 -VaultPath "D:\YourVault" -Enabl
 ### 添加新书
 
 - **有链接**：`Ctrl+P` → **从链接加入书架**，粘贴 `fanqienovel.com/page/<id>`（整段分享文案也可以）。
-- **只知道书名**：`Ctrl+P` → **搜索番茄小说并加入**，勾选后批量加入，或右键单本加入。
+- **只知道书名**：书架工具栏 **＋ 添加番茄书**，或 `Ctrl+P` → **搜索番茄小说并加入**；勾选后批量加入，或右键单本加入。
 - **豆瓣**：先用 `obsidian-douban` 导入，书架会自动出现；不需要侧车。
 
 加完若书架没显示，执行 **重建书架缓存**。详细步骤、重复处理、失败排查见

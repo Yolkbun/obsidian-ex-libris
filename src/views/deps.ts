@@ -19,4 +19,5 @@ export interface ShelfUiDeps {
   linkDouban: (item: ShelfItem) => Promise<void>;
   restartSidecar: () => Promise<void>;
   refreshUnread?: () => Promise<void>;
+  openAddBooks: () => void;
 }

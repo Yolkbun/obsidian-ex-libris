@@ -211,11 +211,17 @@ export class LibraryView extends ItemView {
     const spacer = doc.createElement("div");
     spacer.className = "ex-libris-toolbar-spacer";
 
+    const addButton = doc.createElement("button");
+    addButton.className = "ex-libris-chip ex-libris-add-button";
+    addButton.textContent = "＋ 添加番茄书";
+    addButton.title = "搜索番茄小说并加入书架";
+    addButton.addEventListener("click", () => this.deps.openAddBooks());
+
     const count = doc.createElement("div");
     count.className = "ex-libris-count";
     count.textContent = `${visible.length} / ${allItems.length} 项`;
 
-    toolbar.append(chips, spacer, count);
+    toolbar.append(chips, spacer, addButton, count);
     main.append(toolbar);
 
     if (!this.deps.isSidecarReady()) {

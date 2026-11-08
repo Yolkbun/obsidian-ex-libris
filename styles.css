@@ -720,3 +720,15 @@
   color: var(--text-muted);
   font-size: 0.84em;
 }
+
+.ex-libris-add-button {
+  color: var(--text-on-accent);
+  background: var(--interactive-accent);
+  border-color: transparent;
+  white-space: nowrap;
+}
+
+.ex-libris-add-button:hover {
+  background: var(--interactive-accent-hover);
+  color: var(--text-on-accent);
+}

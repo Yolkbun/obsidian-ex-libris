@@ -310,6 +310,7 @@ export default class ExLibrisPlugin extends Plugin {
       linkDouban: (item) => linkDouban(this.app, this.entries, item),
       restartSidecar: () => this.restartAndReport(),
       refreshUnread: () => this.refreshUnreadCounts(),
+      openAddBooks: () => this.openFanqieSearch(),
     };
   }
 
@@ -331,9 +332,7 @@ export default class ExLibrisPlugin extends Plugin {
     this.addCommand({
       id: "search-fanqie",
       name: "搜索番茄小说并加入",
-      callback: () => {
-        new FanqieSearchModal(this.app, this.client, (books) => this.addBooks(books)).open();
-      },
+      callback: () => this.openFanqieSearch(),
     });
 
     this.addCommand({
@@ -512,6 +511,16 @@ export default class ExLibrisPlugin extends Plugin {
   // ---------------------------------------------------------------------
   // 打开 / 导航
   // ---------------------------------------------------------------------
+
+  /** 书架工具栏的“添加番茄书”按钮，也供命令面板复用。 */
+  openFanqieSearch(): void {
+    if (!this.sidecar.isReady) {
+      new Notice("番茄侧车未就绪，无法搜索。书架与豆瓣不受影响。");
+      this.showSidecarGuide();
+      return;
+    }
+    new FanqieSearchModal(this.app, this.client, (books) => this.addBooks(books)).open();
+  }
 
   async activateShelf(): Promise<void> {
     const leaves = this.app.workspace.getLeavesOfType(VIEW_TYPE_SHELF);
