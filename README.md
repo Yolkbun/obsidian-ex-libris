@@ -167,6 +167,7 @@ powershell -NoProfile -File scripts/install.ps1 -VaultPath "D:\YourVault" -Enabl
 | `把番茄书挂靠到豆瓣条目` | 只写 `fq_related` |
 | `添加书架预设` | 状态/类型/来源/标签 |
 | `重启番茄侧车` | 显示 `/health` 结果 |
+| `刷新当前书目录` | 立即重新拉取当前/选中番茄书的目录 |
 | `本地化所有远程封面` | 断网可读 |
 | `清理章节与封面缓存` / `重建书架缓存` | 维护 |
 

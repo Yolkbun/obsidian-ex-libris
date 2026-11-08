@@ -208,6 +208,20 @@ export class ExLibrisSettingTab extends PluginSettingTab {
         }),
       );
 
+    new Setting(containerEl)
+      .setName("目录刷新间隔")
+      .setDesc("同一本书的目录缓存有效时间；0 表示每次打开都重新拉取。")
+      .addSlider((slider) =>
+        slider
+          .setLimits(0, 120, 5)
+          .setValue(this.plugin.settings.tocRefreshMinutes)
+          .setDynamicTooltip()
+          .onChange(async (value) => {
+            this.plugin.settings.tocRefreshMinutes = value;
+            await this.plugin.saveSettings();
+          }),
+      );
+
     new Setting(containerEl).setName("缓存").setHeading();
 
     const cacheInfo = containerEl.createDiv({ cls: "ex-libris-settings-status" });

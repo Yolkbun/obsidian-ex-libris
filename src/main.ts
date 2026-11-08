@@ -379,6 +379,12 @@ export default class ExLibrisPlugin extends Plugin {
     });
 
     this.addCommand({
+      id: "refresh-toc",
+      name: "刷新当前书目录",
+      callback: () => void this.refreshCurrentToc(),
+    });
+
+    this.addCommand({
       id: "sidecar-guide",
       name: "侧车安装指南",
       callback: () => this.showSidecarGuide(true),
@@ -549,6 +555,40 @@ export default class ExLibrisPlugin extends Plugin {
     }
     const leaf = this.app.workspace.getLeaf(false);
     await leaf.openFile(file);
+  }
+
+  /** 强制刷新当前书（阅读器）或选中的番茄书的目录。 */
+  private async refreshCurrentToc(): Promise<void> {
+    const reader = this.activeReader();
+    if (reader) {
+      try {
+        const count = await reader.refreshToc();
+        new Notice(`目录已刷新：${count} 章`);
+      } catch (err) {
+        new Notice(`刷新目录失败：${describeError(err)}`);
+      }
+      return;
+    }
+
+    const files = this.entries
+      .all()
+      .filter((item) => item.bookId)
+      .map((item) => this.app.vault.getAbstractFileByPath(item.path))
+      .filter((file): file is TFile => file instanceof TFile);
+    if (files.length === 0) {
+      new Notice("书架里还没有番茄书。");
+      return;
+    }
+    const target = await pickNote(this.app, files, "选择要刷新目录的番茄书…");
+    if (!target) return;
+    const item = this.entries.get(target.path);
+    if (!item?.bookId) return;
+    try {
+      const toc = await this.client.chapters(item.bookId, true);
+      new Notice(`《${item.title}》目录已刷新：${toc.items.length} 章`);
+    } catch (err) {
+      new Notice(`刷新目录失败：${describeError(err)}`);
+    }
   }
 
   private async handleProtocol(params: Record<string, string>): Promise<void> {

@@ -295,6 +295,22 @@ export class ReaderView extends ItemView {
     this.showError(`读取失败：${String(err)}`, true);
   }
 
+  /** 强制重新拉取目录（命令“刷新当前书目录”使用）。 */
+  async refreshToc(): Promise<number> {
+    if (!this.rootEl || !this.bookId) return 0;
+    const toc = await this.deps.client.chapters(this.bookId, true);
+    this.toc = toc.items;
+    const currentId = this.current?.id;
+    const index = currentId ? this.toc.findIndex((item) => item.id === currentId) : -1;
+    if (index >= 0) {
+      this.currentIndex = index;
+      this.updateNav();
+    } else if (this.toc[0]) {
+      await this.loadChapter(this.toc[0].id);
+    }
+    return this.toc.length;
+  }
+
   private async loadChapter(
     chapterId: string,
     options: { restore?: boolean } = {},
