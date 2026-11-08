@@ -6,6 +6,8 @@
 Obsidian 桌面插件（Windows，纯自用）。把 `obsidian-douban` 导入的书影音和番茄小说聚合成一个
 iBooks 风格书架，并在 Obsidian 内直接阅读番茄章节、把摘录带出处地送回笔记、点回跳回到原文位置。
 
+**下载安装**：[GitHub Releases](https://github.com/Yolkbun/obsidian-ex-libris/releases/latest)
+
 > 只想看怎么用？看 [**使用指南**](docs/使用指南.md)（安装、书架、阅读、摘录、设置、常见问题）。
 
 ## 界面
