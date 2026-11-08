@@ -219,6 +219,8 @@ function typeLabel(type: ShelfItem["type"]): string {
       return "剧集";
     case "music":
       return "音乐";
+    case "novel":
+      return "小说";
     default:
       return "书";
   }

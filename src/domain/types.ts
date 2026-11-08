@@ -5,7 +5,7 @@
  * 不允许直接 fetch 侧车、不允许碰 `app.metadataCache` 的内部结构。
  */
 
-export type EntryType = "book" | "movie" | "tv" | "music";
+export type EntryType = "book" | "novel" | "movie" | "tv" | "music";
 export type EntrySource = "douban" | "fanqie" | "both";
 
 export type CoverRef =

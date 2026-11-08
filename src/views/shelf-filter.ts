@@ -81,6 +81,7 @@ export function typeCounts(items: ShelfItem[]): Record<TypeFilter, number> {
   return {
     all: items.length,
     book: items.filter((item) => item.type === "book").length,
+    novel: items.filter((item) => item.type === "novel").length,
     movie: items.filter((item) => item.type === "movie").length,
     tv: items.filter((item) => item.type === "tv").length,
     music: items.filter((item) => item.type === "music").length,

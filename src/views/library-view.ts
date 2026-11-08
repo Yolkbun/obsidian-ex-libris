@@ -9,6 +9,7 @@ export const VIEW_TYPE_SHELF = "ex-libris-shelf";
 const TYPE_CHIPS: Array<{ key: TypeFilter; label: string }> = [
   { key: "all", label: "全部" },
   { key: "book", label: "书" },
+  { key: "novel", label: "小说" },
   { key: "movie", label: "影" },
   { key: "tv", label: "剧" },
   { key: "music", label: "音" },

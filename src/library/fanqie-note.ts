@@ -102,7 +102,7 @@ export async function createFanqieNote(
 
   const frontmatter = buildFrontmatter(
     {
-      type: "book",
+      type: "novel",
       source: "fanqie",
       title: detail.title,
       author: detail.author || "",
@@ -119,7 +119,7 @@ export async function createFanqieNote(
       fq_last_read_at: "",
       fq_related: "",
       created: new Date().toISOString().slice(0, 10),
-      tags: ["book", "fanqie"],
+      tags: ["novel", "fanqie"],
     },
     FANQIE_FIELD_ORDER,
   );

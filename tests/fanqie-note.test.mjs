@@ -46,8 +46,8 @@ test("建立番茄轻笔记：frontmatter 齐全、正文不落盘", async (t) =
   assert.equal(result.file.path, "Library/book/藏书票样章.md");
 
   const content = await readFile(path.join(root, "Library/book/藏书票样章.md"), "utf8");
-  assert.match(content, /^---\nfq_book_id|^---\ntype: book/);
-  assert.match(content, /type: book/);
+  assert.match(content, /^---\nfq_book_id|^---\ntype: novel/);
+  assert.match(content, /type: novel/);
   assert.match(content, /source: fanqie/);
   assert.match(content, /title: 藏书票样章/);
   assert.match(content, /author: Ex Libris/);
@@ -55,7 +55,7 @@ test("建立番茄轻笔记：frontmatter 齐全、正文不落盘", async (t) =
   assert.match(content, /fq_book_id: "7143038691944959011"/);
   assert.match(content, /fq_word_count: 12600/);
   assert.match(content, /fq_chapter_total: 3/);
-  assert.match(content, /tags: \[book, fanqie\]/);
+  assert.match(content, /tags: \[novel, fanqie\]/);
   assert.match(content, /fq_progress: 0/);
   assert.ok(!content.includes("旧书摊"), "正文不能写进笔记");
 

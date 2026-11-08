@@ -394,6 +394,7 @@ test("frontmatter 夹具能被 EntryIndex 识别为番茄条目", async () => {
   assert.ok(item);
   assert.equal(item.bookId, "7143038691944959011");
   assert.equal(item.source, "fanqie");
+  assert.equal(item.type, "novel");
 });
 
 test("豆瓣条目：生成 frontmatter、重复跳过", async () => {

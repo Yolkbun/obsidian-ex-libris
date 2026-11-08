@@ -56,7 +56,7 @@ export async function exportChapterFile(
   const path = chapterFilePath(settings, bookTitle, chapter, meta);
   const frontmatter = buildFrontmatter(
     {
-      type: "book",
+      type: "novel",
       source: "fanqie-export",
       title: meta?.title || chapter.title || "",
       author: "",
@@ -65,7 +65,7 @@ export async function exportChapterFile(
       fq_chapter_id: chapter.id,
       fq_chapter_index: typeof chapter.index === "number" ? chapter.index : meta?.index ?? 0,
       exported: new Date().toISOString(),
-      tags: ["book", "fanqie"],
+      tags: ["novel", "fanqie"],
     },
     EXPORT_FIELD_ORDER,
   );

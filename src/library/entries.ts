@@ -36,6 +36,11 @@ export function normalizeType(raw: unknown): EntryType {
     case "album":
     case "音乐":
       return "music";
+    case "novel":
+    case "webnovel":
+    case "小说":
+    case "网文":
+      return "novel";
     default:
       return "book";
   }
@@ -123,7 +128,7 @@ export function toShelfItem(
   const item: ShelfItem = {
     path: file.path,
     title,
-    type: normalizeType(fields.type),
+    type: fanqie ? "novel" : normalizeType(fields.type),
     source,
     cover: covers.resolve(fields, file.path),
     progress: progress === null ? null : clamp(progress, 0, 100),

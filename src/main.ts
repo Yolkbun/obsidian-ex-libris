@@ -725,7 +725,7 @@ export default class ExLibrisPlugin extends Plugin {
 
     const fanqie = this.entries
       .all()
-      .filter((item) => item.bookId && isReading(item.status) && item.type === "book")
+      .filter((item) => item.bookId && isReading(item.status))
       .slice(0, 20);
 
     for (const item of fanqie) {
