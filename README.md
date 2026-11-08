@@ -308,7 +308,7 @@ Obsidian 安装器只下载三个插件文件。侧车是独立 exe，需要从 
 **Ex Libris Bookplate** is a desktop Obsidian plugin that turns Douban and Fanqie into an iBooks-style
 bookshelf. It is Windows-only because Fanqie reading uses a local sidecar executable.
 
-- Search Douban (books, movies, TV) and add entries without `obsidian-douban`; optional read-only
+- Search Douban (books, movies, TV, music) and add entries without `obsidian-douban`; optional read-only
   linkage with `obsidian-douban` can be toggled in settings.
 - Read Fanqie chapters, keep per-chapter progress, and quote passages with source + back-jump links.
 - Export a chapter or a whole book; chapter text never enters the vault unless you export it.
