@@ -428,6 +428,9 @@
 
 .ex-libris-reader-page {
   max-width: 38em;
+  -webkit-user-select: text;
+  user-select: text;
+  cursor: text;
   margin: 0 auto;
   font-family: "Songti SC", "Source Han Serif SC", "Noto Serif CJK SC", serif;
   font-size: var(--ex-reader-font-size, 18px);
@@ -441,6 +444,13 @@
   font-weight: 600;
   margin: 0 0 1.6em;
   letter-spacing: 0.02em;
+}
+
+.ex-libris-reader-page h1,
+.ex-libris-reader-page p,
+.ex-libris-reader-page span {
+  -webkit-user-select: text;
+  user-select: text;
 }
 
 .ex-libris-reader-page p {
@@ -811,6 +821,8 @@
 
 .ex-libris-annotate-toolbar {
   position: fixed;
+  -webkit-user-select: none;
+  user-select: none;
   z-index: var(--layer-popover, 1000);
   display: none;
   align-items: center;
